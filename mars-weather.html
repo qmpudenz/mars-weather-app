@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mars Weather</title>
+</head>
+<body>
+    <h1>Mars Weather</h1>
+    <div>
+        <h2>Sol Date: <span id="solDate"></span></h2>
+        <h3>Air Temperature</h3>
+        <p>High: <span id="highTemperature"></span></p>
+        <p>Low: <span id="lowTemperature"></span></p>
+        <h3>Pressure: <span id="pressure"></span></h3>
+        <h3>Sunrise: <span id="sunrise"></span></h3>
+        <h3>Sunset: <span id="sunset"></span></h3>
+    </div>
+    <script>
+        async function getMarsWeather() {
+            try {
+                const response = await fetch('http://localhost:3000/mars_weather');
+                const data = await response.json();
+                displayWeatherData(data);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function displayWeatherData(data) {
+            if (!data) {
+                console.error('No data provided to displayWeatherData');
+                return;
+            }
+            document.getElementById('solDate').textContent = data.solDate;
+            document.getElementById('highTemperature').textContent = data.highTemperature;
+            document.getElementById('lowTemperature').textContent = data.lowTemperature;
+            document.getElementById('pressure').textContent = data.pressure;
+            document.getElementById('sunrise').textContent = data.sunrise;
+            document.getElementById('sunset').textContent = data.sunset;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            getMarsWeather();
+        });
+    </script>
+</body>
+</html>
