@@ -11,6 +11,11 @@ async function scrapeWeather() {
     (el) => el.textContent
   );
 
+  const earthDate = await page.$eval(
+    '#MSL-Weather-Report .earthDate',
+    (el) => el.textContent
+  );
+
   const highTemperature = await page.$eval(
     '#MSL-Weather-Report .temperatures.main .highs .fahrenheit',
     (el) => el.textContent
@@ -37,7 +42,8 @@ async function scrapeWeather() {
   
   
   console.log('Sol Date:', solDate);
-  console.log('Air Temperature:', highTemperature);
+  console.log('Earth Date:', earthDate);
+  console.log('High Temperature:', highTemperature);
   console.log('Low Temperature:', lowTemperature);
   console.log('Pressure:', pressure);
   console.log('Sunrise:', sunrise);
@@ -46,6 +52,7 @@ async function scrapeWeather() {
 
   const marsWeather = {
     solDate,
+    earthDate,
     highTemperature,
     lowTemperature,
     pressure,

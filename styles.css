@@ -1,0 +1,100 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  background-color: #222;
+  margin: 0;
+  padding: 0;
+  color: #fff;
+}
+
+.sunDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+  font-size: 60px;
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.weather-container {
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px;
+  background-color: #313131;
+}
+
+h2, h3 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-weight: normal;
+  font-size: 24px;
+  justify-content: center;
+}
+
+p {
+  display: flex;
+  align-items: center;
+  font-size: 50px;
+  margin-top: 0;
+  margin-bottom: 0px;
+}
+
+.sun {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.date {
+  display: flex;
+  width: 20vw;
+  flex-direction: column;
+  align-items: left;
+  justify-self: left;
+  margin-left: 20px;
+  justify-content:space-around;
+}
+
+.temperature {
+  display: flex;
+  flex-direction: column;
+  width: 20vw;
+  align-items: center;
+}
+
+.highAndLow {
+  display: flex;
+  flex-direction: column;
+  align-items:center;
+}
+
+.additionalInfo {
+  width: 20vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.marsDate {
+  font-weight: bold;
+  font-size: 60px;
+  margin:0;
+  justify-content:left;
+}
+
+.earthDate {
+  font-size:40px;
+  margin:0;
+  height:auto;
+  justify-content: left;
+}
+ 

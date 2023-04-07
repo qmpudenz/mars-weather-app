@@ -1,8 +1,9 @@
 {
-  "solDate": "Sol 3783",
-  "highTemperature": "-2°",
-  "lowTemperature": "-105°",
+  "solDate": "Sol 3787",
+  "earthDate": "April 2, 2023",
+  "highTemperature": "0°",
+  "lowTemperature": "-107°",
   "pressure": "846",
-  "sunrise": "06:15",
-  "sunset": "18:03"
+  "sunrise": "06:14",
+  "sunset": "18:02"
 }
