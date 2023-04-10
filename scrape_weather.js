@@ -17,28 +17,59 @@ async function scrapeWeather() {
   );
 
   const highTemperature = await page.$eval(
-    '#MSL-Weather-Report .temperatures.main .highs .fahrenheit',
+    '.wysiwyg_content table.mb_table tbody tr:nth-child(2) td:nth-child(3) .fahrenheit',
     (el) => el.textContent
   );
   
   const lowTemperature = await page.$eval(
-    '#MSL-Weather-Report .temperatures.main .lows .fahrenheit',
+    '.wysiwyg_content table.mb_table tbody tr:nth-child(2) td:nth-child(4) .fahrenheit',
     (el) => el.textContent
   );
 
   const pressure = await page.$eval(
-    '#weather_observation td.pressure',
+    '.wysiwyg_content table.mb_table tbody tr:nth-child(2) td:nth-child(5)',
     (el) => el.textContent
   );
 
   const sunrise = await page.$eval(
-    '#weather_observation td.sun',
+    '.wysiwyg_content table.mb_table tbody tr:nth-child(2) td:nth-child(6)',
     (el) => el.textContent
   );
   const sunset = await page.$eval(
-    '#weather_observation td.sun.set',
+    '.wysiwyg_content table.mb_table tbody tr:nth-child(2) td:nth-child(7)',
     (el) => el.textContent
   );
+
+  const yesterdaySolDate = await page.$eval(
+    '.wysiwyg_content table.mb_table tbody tr:nth-child(3) th:nth-child(2)',
+    (el) => el.textContent
+  );
+  const yesterdayHigh = await page.$eval(
+    '.wysiwyg_content table.mb_table tbody tr:nth-child(3) td:nth-child(3) .fahrenheit',
+    (el) => el.textContent
+  );
+  const yesterdayLow = await page.$eval(
+    '.wysiwyg_content table.mb_table tbody tr:nth-child(3) td:nth-child(4) .fahrenheit',
+    (el) => el.textContent
+  ); 
+
+const highTemperatures = [];
+const lowTemperatures = [];
+
+for (let i = 2; i <= 6; i++) {
+  const highTemperature = await page.$eval(
+    `.wysiwyg_content table.mb_table tbody tr:nth-child(${i}) td:nth-child(3) .fahrenheit`,
+    (el) => el.textContent
+  );
+  highTemperatures.push(highTemperature);
+
+  const lowTemperature = await page.$eval(
+    `.wysiwyg_content table.mb_table tbody tr:nth-child(${i}) td:nth-child(4) .fahrenheit`,
+    (el) => el.textContent
+  );
+  lowTemperatures.push(lowTemperature);
+}
+
   
   
   console.log('Sol Date:', solDate);
@@ -48,6 +79,11 @@ async function scrapeWeather() {
   console.log('Pressure:', pressure);
   console.log('Sunrise:', sunrise);
   console.log('Sunset:', sunset);
+  console.log('Yesterday Sol Date:', yesterdaySolDate);
+  console.log('Yesterday High:', yesterdayHigh);
+  console.log('Yesterday Low:', yesterdayLow);
+  console.log('High Temperatures:', highTemperatures);
+  console.log('Low Temperatures:', lowTemperatures);
 
 
   const marsWeather = {
@@ -57,8 +93,14 @@ async function scrapeWeather() {
     lowTemperature,
     pressure,
     sunrise,
-    sunset
+    sunset,
+    yesterdaySolDate,
+    yesterdayHigh,
+    yesterdayLow,
+    highTemperatures,
+    lowTemperatures
   };
+  
 
   fs.writeFile(
     'mars_weather.json',
@@ -74,5 +116,17 @@ async function scrapeWeather() {
 
   await browser.close();
 }
+
+async function fetchData() {
+  try {
+    const response = await fetch('http://localhost:3000/mars_weather');
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching Mars weather data:', error);
+  }
+}
+
+
 
 scrapeWeather();

@@ -28,6 +28,17 @@ h1 {
   justify-content: space-between;
   padding: 30px;
   background-color: #313131;
+  height:200px;
+}
+
+.chart-container {
+  width: 80%;
+  margin: 32px auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px;
+  background-color: #313131;
 }
 
 h2, h3 {
@@ -81,7 +92,8 @@ p {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-around;
+
 }
 
 .marsDate {

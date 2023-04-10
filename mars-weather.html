@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mars Weather</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
 </head>
 <body>
@@ -42,6 +43,10 @@
                       </svg>Sunset: <span id="sunset"></span></h3>
         </div>
     </div>
+    
+    <div class="chart-container">
+        <canvas id="temperatureChart"></canvas>
+    </div>
     <script>
         async function getMarsWeather() {
             try {
@@ -53,23 +58,91 @@
             }
         }
 
-        function displayWeatherData(data) {
-            if (!data) {
-                console.error('No data provided to displayWeatherData');
-                return;
+        function displayWeatherData(weatherData) {
+  const {
+    solDate,
+    earthDate,
+    highTemperature,
+    lowTemperature,
+    pressure,
+    sunrise,
+    sunset,
+    yesterdaySolDate,
+    yesterdayHigh,
+    yesterdayLow,
+    highTemperatures,
+    lowTemperatures
+  } = weatherData;
+
+  document.getElementById('solDate').innerText = solDate;
+  document.getElementById('earthDate').innerText = earthDate;
+  document.getElementById('highTemperature').innerText = highTemperature;
+  document.getElementById('lowTemperature').innerText = lowTemperature;
+  document.getElementById('pressure').innerText = pressure;
+  document.getElementById('sunrise').innerText = sunrise;
+  document.getElementById('sunset').innerText = sunset;
+
+  const currentSol = parseInt(weatherData.solDate.match(/\d+/)[0]);
+  
+  const temperatureData = weatherData.highTemperatures.map((high, index) => {
+    const highTemp = parseInt(high);
+    const lowTemp = parseInt(weatherData.lowTemperatures[index]);
+
+    return {
+      sol: currentSol - index,
+      high: highTemp,
+      low: lowTemp,
+    };
+  });
+
+  console.log('weatherData:', weatherData);
+  console.log('Temperature data:', temperatureData);
+  renderTemperatureChart(temperatureData);
+}
+
+
+
+
+function renderTemperatureChart(temperatureData) {
+    const ctx = document.getElementById('temperatureChart').getContext('2d');
+    const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: temperatureData.map(data => data.sol),
+            datasets: [
+                {
+                    label: 'High Temperature',
+                    data: temperatureData.map(data => data.high),
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Low Temperature',
+                    data: temperatureData.map(data => data.low),
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
             }
-            document.getElementById('solDate').textContent = data.solDate;
-            document.getElementById('earthDate').textContent = data.earthDate;
-            document.getElementById('highTemperature').textContent = data.highTemperature;
-            document.getElementById('lowTemperature').textContent = data.lowTemperature;
-            document.getElementById('pressure').textContent = data.pressure;
-            document.getElementById('sunrise').textContent = data.sunrise;
-            document.getElementById('sunset').textContent = data.sunset;
         }
+    });
+}
+
+
 
         document.addEventListener('DOMContentLoaded', () => {
             getMarsWeather();
         });
+
+        
     </script>
 </body>
 </html>
