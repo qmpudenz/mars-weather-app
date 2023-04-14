@@ -1,0 +1,11 @@
+name: Update Mars Weather
+
+on:
+  schedule:
+    - cron: '0 */6 * * *' # This will run the action every 6 hours. Adjust the cron expression as needed.
+
+jobs:
+  update_weather:
+    runs-on: ubuntu-latest
+
+    steps

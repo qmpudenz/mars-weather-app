@@ -130,3 +130,5 @@ async function fetchData() {
 
 
 scrapeWeather();
+
+module.exports = scrapeWeather;
