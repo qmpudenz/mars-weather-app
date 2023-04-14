@@ -56,7 +56,7 @@ async function scrapeWeather() {
 const highTemperatures = [];
 const lowTemperatures = [];
 
-for (let i = 2; i <= 6; i++) {
+for (let i = 2; i <= 8; i++) {
   const highTemperature = await page.$eval(
     `.wysiwyg_content table.mb_table tbody tr:nth-child(${i}) td:nth-child(3) .fahrenheit`,
     (el) => el.textContent

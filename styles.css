@@ -41,6 +41,28 @@ h1 {
   background-color: #313131;
 }
 
+.temperatureChart {
+  width: 75vw;
+  height: 100%;
+}
+
+.subheaderContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  width: 100%;
+  height: 100px;
+}
+
+.subheader {
+  display: flex;
+  text-align: flex-end;
+  justify-content: left;
+  font-weight: lighter;
+  font-size: 24px;
+
+}
+
 h2, h3 {
   display: flex;
   align-items: center;
@@ -48,6 +70,15 @@ h2, h3 {
   font-weight: normal;
   font-size: 24px;
   justify-content: center;
+}
+
+.subInfo {
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  font-weight: lighter;
+  margin-top: 0;
+  margin-bottom: 0px;
 }
 
 p {
@@ -88,12 +119,14 @@ p {
 }
 
 .additionalInfo {
-  width: 20vw;
+  width: 22vw;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
-
+  justify-content: space-around;  
+  border-width: 1px;
+  border-style: solid;
+  border-color: #fff;
 }
 
 .marsDate {

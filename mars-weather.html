@@ -15,32 +15,36 @@
         <div class="date">
             <h2 class="marsDate"><span id="solDate"></span></h2>
             <h3 class="earthDate"><span id="earthDate"></span></h3>
+            <div class="subheaderContainer">
+                <p class="subheader">Latest from Gale Crater via the Curiousity Rover</p>
+            </div>
+            
         </div>
         <div class="temperature">
             <div class="highAndLow">
                 <p><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-thermometer-high" viewBox="0 0 16 16">
                     <path d="M9.5 12.5a1.5 1.5 0 1 1-2-1.415V2.5a.5.5 0 0 1 1 0v8.585a1.5 1.5 0 0 1 1 1.415z"/>
                     <path d="M5.5 2.5a2.5 2.5 0 0 1 5 0v7.55a3.5 3.5 0 1 1-5 0V2.5zM8 1a1.5 1.5 0 0 0-1.5 1.5v7.987l-.167.15a2.5 2.5 0 1 0 3.333 0l-.166-.15V2.5A1.5 1.5 0 0 0 8 1z"/>
-                  </svg>High: <span id="highTemperature"></span></p>
+                  </svg>High:&nbsp;<span id="highTemperature"></span></p>
                 <p><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-thermometer-low" viewBox="0 0 16 16">
                     <path d="M9.5 12.5a1.5 1.5 0 1 1-2-1.415V9.5a.5.5 0 0 1 1 0v1.585a1.5 1.5 0 0 1 1 1.415z"/>
                     <path d="M5.5 2.5a2.5 2.5 0 0 1 5 0v7.55a3.5 3.5 0 1 1-5 0V2.5zM8 1a1.5 1.5 0 0 0-1.5 1.5v7.987l-.167.15a2.5 2.5 0 1 0 3.333 0l-.166-.15V2.5A1.5 1.5 0 0 0 8 1z"/>
-                  </svg>Low: <span id="lowTemperature"></span></p>
+                  </svg>Low:&nbsp;<span id="lowTemperature"></span></p>
             </div>
         </div>
         <div class="additionalInfo">
             <h3><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-sunrise" viewBox="0 0 16 16">
                 <path d="M7.646 1.146a.5.5 0 0 1 .708 0l1.5 1.5a.5.5 0 0 1-.708.708L8.5 2.707V4.5a.5.5 0 0 1-1 0V2.707l-.646.647a.5.5 0 1 1-.708-.708l1.5-1.5zM2.343 4.343a.5.5 0 0 1 .707 0l1.414 1.414a.5.5 0 0 1-.707.707L2.343 5.05a.5.5 0 0 1 0-.707zm11.314 0a.5.5 0 0 1 0 .707l-1.414 1.414a.5.5 0 1 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zM8 7a3 3 0 0 1 2.599 4.5H5.4A3 3 0 0 1 8 7zm3.71 4.5a4 4 0 1 0-7.418 0H.499a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1h-3.79zM0 10a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2A.5.5 0 0 1 0 10zm13 0a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
-              </svg>Sunrise: <span id="sunrise"></span></h3>
+            </svg>&nbsp;Sunrise:&nbsp;<div class="subInfo"><span id="sunrise"></span>&nbsp;(LMST)</div></h3>
               
               <h3><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-speedometer" viewBox="0 0 16 16">
                 <path d="M8 2a.5.5 0 0 1 .5.5V4a.5.5 0 0 1-1 0V2.5A.5.5 0 0 1 8 2zM3.732 3.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707zM2 8a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8zm9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5zm.754-4.246a.389.389 0 0 0-.527-.02L7.547 7.31A.91.91 0 1 0 8.85 8.569l3.434-4.297a.389.389 0 0 0-.029-.518z"/>
                 <path fill-rule="evenodd" d="M6.664 15.889A8 8 0 1 1 9.336.11a8 8 0 0 1-2.672 15.78zm-4.665-4.283A11.945 11.945 0 0 1 8 10c2.186 0 4.236.585 6.001 1.606a7 7 0 1 0-12.002 0z"/>
-              </svg>Pressure: <span id="pressure"></span></h3>
+            </svg>&nbsp;Pressure:&nbsp;<div class="subInfo"><span id="pressure"></span>&nbsp;(Pa)</div></h3>
               
               <h3><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-sunset" viewBox="0 0 16 16">
                         <path d="M7.646 4.854a.5.5 0 0 0 .708 0l1.5-1.5a.5.5 0 0 0-.708-.708l-.646.647V1.5a.5.5 0 0 0-1 0v1.793l-.646-.647a.5.5 0 1 0-.708.708l1.5 1.5zm-5.303-.51a.5.5 0 0 1 .707 0l1.414 1.413a.5.5 0 0 1-.707.707L2.343 5.05a.5.5 0 0 1 0-.707zm11.314 0a.5.5 0 0 1 0 .706l-1.414 1.414a.5.5 0 1 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zM8 7a3 3 0 0 1 2.599 4.5H5.4A3 3 0 0 1 8 7zm3.71 4.5a4 4 0 1 0-7.418 0H.499a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1h-3.79zM0 10a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2A.5.5 0 0 1 0 10zm13 0a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
-                      </svg>Sunset: <span id="sunset"></span></h3>
+                    </svg>&nbsp;Sunset:&nbsp;<div class="subInfo"><span id="sunset"></span>&nbsp;(LMST)</div></h3>
         </div>
     </div>
     
@@ -97,7 +101,10 @@
 
   console.log('weatherData:', weatherData);
   console.log('Temperature data:', temperatureData);
-  renderTemperatureChart(temperatureData);
+  const reversedTemperatureData = temperatureData.reverse();
+
+// Pass the reversed array to the renderTemperatureChart function
+renderTemperatureChart(reversedTemperatureData);
 }
 
 
@@ -108,32 +115,108 @@ function renderTemperatureChart(temperatureData) {
     const chart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: temperatureData.map(data => data.sol),
+            labels: temperatureData.slice(-7).map(data => `Sol ${data.sol}`),
             datasets: [
                 {
                     label: 'High Temperature',
-                    data: temperatureData.map(data => data.high),
+                    data: temperatureData.slice(-7).map(data => data.high),
                     backgroundColor: 'rgba(255, 99, 132, 0.2)',
                     borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1
+                    borderWidth: 4
                 },
                 {
                     label: 'Low Temperature',
-                    data: temperatureData.map(data => data.low),
+                    data: temperatureData.slice(-7).map(data => data.low),
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
                     borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
+                    borderWidth: 4
                 }
             ]
         },
         options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+      // Adjusting font size for axes labels
+      scales: {
+        x: {
+          ticks: {
+            font: {
+              size: 24
+            },
+            color: 'white' // Change the font color to white for the X-axis labels
+          }
+        },
+        y: {
+          beginAtZero: true,
+          ticks: {
+            font: {
+              size: 20,
+              weight: 'lighter'
+            },
+            color: 'white', // Change the font color to white for the Y-axis labels
+            // Add °F suffix to the Y-axis labels
+            callback: function(value) {
+              return value + '°F';
             }
+          }
         }
-    });
+      },
+      plugins: {
+        // Adjusting font size for the title
+        title: {
+          display: true,
+          text: 'Weekly Temperatures',
+          font: {
+            size: 48
+          },
+          padding: 20,
+            color: 'white' // Change the font color to white for the title
+        },
+      tooltip: {
+        // ...
+        callbacks: {
+          // Add 'Sol' prefix to the tooltip's title
+          title: function(tooltipItems) {
+            const tooltipItem = tooltipItems[0];
+            return 'Sol ' + tooltipItem.label;
+          },
+          // Add °F suffix to the tooltip's data value
+          label: function(context) {
+            const dataset = context.dataset;
+            const currentValue = context.parsed.y;
+            return dataset.label + ': ' + currentValue + '°F';
+          }
+        }
+      },
+        // Adjusting font size for the legend labels
+        legend: {
+          position: 'bottom',
+          labels: {
+            font: {
+              size: 24,
+              weight: 'lighter'
+            },
+            padding: 20,
+            color: 'white', // Change the font color to white for the legend labels
+          }
+        },
+      },
+      // Adjusting font size for the tooltip
+      tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        titleFont: {
+          size: 50
+        },
+        bodyFont: {
+          size: 50
+        },
+        footerFont: {
+          size: 50
+        },
+        padding: 10,
+        displayColors: false
+      },
+      // ...
+    }
+  });
 }
 
 
