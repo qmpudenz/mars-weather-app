@@ -192,11 +192,6 @@ function renderTemperatureChart(temperatureData) {
       tooltip: {
         // ...
         callbacks: {
-          // Add 'Sol' prefix to the tooltip's title
-          title: function(tooltipItems) {
-            const tooltipItem = tooltipItems[0];
-            return 'Sol ' + tooltipItem.label;
-          },
           // Add °F suffix to the tooltip's data value
           label: function(context) {
             const dataset = context.dataset;
