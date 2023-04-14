@@ -1,4 +1,5 @@
 body {
+  display: grid;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   background-color: #222;
   margin: 0;
@@ -143,3 +144,108 @@ p {
   justify-content: left;
 }
  
+.photo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-self: center;
+  justify-content: center;
+  padding: 30px;
+  background-color: #313131;
+  height: auto;
+  width: 80vw;
+  margin-bottom: 32px;
+}
+
+.slide {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px;
+  background-color: #313131;
+  height: 70vh;
+  width: 80vw;
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+
+button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #313131;
+  border: 0px solid #fff;
+  color: #fff;
+  font-size: 24px;
+  font-weight: bold;
+  padding: 10px;
+  margin: 10px;
+  width: 100px;
+  height: 50px;
+}
+
+.button-left {
+  display: flex;
+  justify-self: left;
+}
+
+.rover-photo {
+  display: flex;
+  max-height: 65vh;
+  max-width: 65vw;
+  
+}
+
+.photo-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  padding-top: 50px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.modal-content {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 700px;
+}
+
+.close-modal {
+  position: absolute;
+  top: 15px;
+  right: 35px;
+  color: #f1f1f1;
+  font-size: 40px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.close-modal:hover,
+.close-modal:focus {
+  color: #bbb;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#modalCaption {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 700px;
+  text-align: center;
+  color: #ccc;
+  padding: 10px 0;
+  height: 150px;
+}
+
+.pictureTitle {
+  margin-bottom: 0;
+  margin-top:0;
+}
