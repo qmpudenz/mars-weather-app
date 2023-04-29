@@ -120,7 +120,7 @@ p {
 }
 
 .additionalInfo {
-  width: 22vw;
+  width: 26vw;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -132,13 +132,13 @@ p {
 
 .marsDate {
   font-weight: bold;
-  font-size: 60px;
+  font-size: 52px;
   margin:0;
   justify-content:left;
 }
 
 .earthDate {
-  font-size:40px;
+  font-size:32px;
   margin:0;
   height:auto;
   justify-content: left;
