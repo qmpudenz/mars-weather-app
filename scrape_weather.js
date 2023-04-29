@@ -61,5 +61,5 @@ const fetchData = async () => {
 
 
 
-fetchData().then((data)
+fetchData().then(data)
 
