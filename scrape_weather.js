@@ -60,6 +60,3 @@ const fetchData = async () => {
 };
 
 
-
-fetchData().then(data)
-

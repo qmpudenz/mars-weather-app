@@ -40,6 +40,7 @@ h1 {
   justify-content: space-between;
   padding: 30px;
   background-color: #313131;
+  height: 50vh;
 }
 
 .temperatureChart {
@@ -60,7 +61,7 @@ h1 {
   text-align: flex-end;
   justify-content: left;
   font-weight: lighter;
-  font-size: 24px;
+  font-size: 2vw;
 
 }
 
@@ -132,7 +133,7 @@ p {
 
 .marsDate {
   font-weight: bold;
-  font-size: 52px;
+  font-size: 5vw;
   margin:0;
   justify-content:left;
 }
@@ -151,7 +152,7 @@ p {
   justify-self: center;
   justify-content: center;
   padding: 30px;
-  background-color: #313131;
+  background-color: #222;
   height: auto;
   width: 80vw;
   margin-bottom: 32px;
@@ -161,9 +162,9 @@ p {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 30px;
-  background-color: #313131;
+  background-color: #222;
   height: 70vh;
   width: 80vw;
   margin-bottom: 0px;
@@ -174,13 +175,13 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #313131;
+  background-color: #fff0;
   border: 0px solid #fff;
   color: #fff;
   font-size: 24px;
   font-weight: bold;
   padding: 10px;
-  margin: 10px;
+  margin: -12px;
   width: 100px;
   height: 50px;
 }
@@ -248,4 +249,150 @@ button {
 .pictureTitle {
   margin-bottom: 0;
   margin-top:0;
+}
+
+/* Default styles for chart title */
+.chart-title {
+  font-size: 40px;
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 40px;
+  }
+  
+  .weather-container {
+    flex-direction: column;
+    height: auto;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .subheaderContainer {
+    flex-direction: column;
+    height: auto;
+  }
+  
+  .subheader {
+    justify-content: center;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  .date {
+    width: 100%;
+    margin: 0;
+    justify-content: center;
+    height: 20vh;
+    justify-content: space-between;
+  }
+  
+  .temperature {
+    margin: 40px 0;
+  }
+  
+  .additionalInfo {
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  .marsDate {
+    justify-content: center;
+    font-size: 40px;
+  }
+  
+  .earthDate {
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 300;
+  }
+  
+  .photo-container {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .subheader {
+    font-size: 6vw;
+  }
+  
+  .slide {
+    height: auto;
+    padding: 20px;
+    flex-direction: column;
+  }
+  
+  .rover-photo {
+    max-height: 50vh;
+    max-width: 80vw;
+  }
+  
+  .modal-content {
+    width: 90%;
+  }
+  
+  #modalCaption {
+    height: auto;
+    font-size: 20px;
+  }
+  
+  .button-left {
+    justify-content: center;
+  }
+  
+  button {
+    font-size: 20px;
+    width: 80px;
+    height: 40px;
+    margin: 0 20px;
+  }
+
+  .chart-container {
+    height: 40vh;
+    padding: 20px;
+  }
+
+  .chart-title {
+    font-size: 24px;
+  }
+
+  .rover-photo {
+    display: flex;
+    max-height: 90vw;
+    max-width: 90vw;
+    margin: 24px 0;
+  }
+}
+
+.photo-container {
+  position: relative;
+  margin-top: 1rem;
+}
+
+.button-container {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  justify-content: center;
+  display: flex;
+}
+
+@media (min-width: 768px) {
+  .button-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem;
+      box-sizing: border-box;
+      align-items: center;
+  }
+  .button-left {
+      order: 1;
+  }
+  #next-photo {
+      order: 2;
+  }
 }

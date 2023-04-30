@@ -93,105 +93,102 @@ function displayWeatherData(weatherData) {
     renderTemperatureChart(lastSevenDaysReverseData);
   }
   
-function renderTemperatureChart(temperatureData) {
+  function renderTemperatureChart(temperatureData) {
     const ctx = document.getElementById("temperatureChart").getContext("2d");
     const chart = new Chart(ctx, {
-        type: "line",
-        data: {
+      type: "line",
+      data: {
         labels: temperatureData.map((data) => {
-            const label = data.sol ? `Sol ${data.sol}` : "undefined";
-            return label;
+          const label = data.sol ? `Sol ${data.sol}` : "undefined";
+          return label;
         }),
-
+  
         datasets: [
-            {
+          {
             label: "High Temperature",
             data: temperatureData.map((data) => data.high),
             backgroundColor: "rgba(255, 99, 132, 0.2)",
             borderColor: "rgba(255, 99, 132, 1)",
-            borderWidth: 4,
-            },
-            {
+            borderWidth: 2, // Decrease the border width for smaller screens
+          },
+          {
             label: "Low Temperature",
             data: temperatureData.map((data) => data.low),
             backgroundColor: "rgba(75, 192, 192, 0.2)",
             borderColor: "rgba(75, 192, 192, 1)",
-            borderWidth: 4,
-            },
+            borderWidth: 2, // Decrease the border width for smaller screens
+          },
         ],
-        },
-        options: {
+      },
+      options: {
+        responsive: true, // Set responsive to true for the chart to adjust to smaller screens
+        maintainAspectRatio: false, // Set maintainAspectRatio to false to allow the chart to resize to its container
         scales: {
-            x: {
+          x: {
             ticks: {
-                font: {
-                size: 24
-                },
-                color: 'white'
-            }
+              font: {
+                size: 12, // Decrease the font size for smaller screens
+              },
+              color: "white",
             },
-            y: {
+          },
+          y: {
             beginAtZero: true,
             ticks: {
-                font: {
-                size: 20,
-                weight: 'lighter'
-                },
-                color: 'white',
-                callback: function(value) {
-                return value + '°F';
-                }
-            }
-            }
+              font: {
+                size: 12, // Decrease the font size for smaller screens
+                weight: "lighter",
+              },
+              color: "white",
+              callback: function (value) {
+                return value + "°F";
+              },
+            },
+          },
         },
         plugins: {
-            title: {
+          title: {
             display: true,
-            text: 'Weekly Temperatures',
+            text: "Weekly Temperatures",
             font: {
-                size: 48
+              size: 28, // Decrease the font size for smaller screens
             },
-            padding: 20,
-            color: 'white'
-            },
-            tooltip: {
-            callbacks: {
-                label: function(context) {
-                const dataset = context.dataset;
-                const currentValue = context.parsed.y;
-                return dataset.label + ': ' + currentValue + '°F';
-                }
-            }
-            },
-            legend: {
-            position: 'bottom',
-            labels: {
-                font: {
-                size: 24,
-                weight: 'lighter'
-                },
-                padding: 20,
-                color: 'white',
-            }
-            },
-        },
-        tooltip: {
-            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            "padding-bottom": 40,
+            color: "white",
+            className: 'chart-title',
+          },
+          tooltip: {
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
             titleFont: {
-            size: 50
+              size: 16, // Decrease the font size for smaller screens
             },
             bodyFont: {
-            size: 50
+              size: 16, // Decrease the font size for smaller screens
             },
             footerFont: {
-            size: 50
+              size: 16, // Decrease the font size for smaller screens
             },
             padding: 10,
-            displayColors: false
+            displayColors: false,
+          },
+          legend: {
+            display: true,
+            position: "bottom",
+            labels: {
+              font: {
+                size: 12, // Decrease the font size for smaller screens
+                weight: "lighter",
+              },
+              padding: 10,
+              color: "white",
+              
+            },
+          },
         },
-        }
+      },
     });
-}
+  }
+  
 
 async function fetchRoverPhotos(sol, roverName) {
     const apiKey = 'DB6sVUROk8cG7IvNWDC11xZL5U3NLIHGLEsAK6jo';
