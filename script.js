@@ -199,19 +199,29 @@ async function fetchRoverPhotos(sol, roverName) {
     return data.photos;
 }
 
+let photos = [];
 let currentPhotoIndex = 0;
+let img; // declare img variable in the global scope
 
 function displayRoverPhotos(photos) {
     const roverPhotosDiv = document.getElementById('rover-photos');
     roverPhotosDiv.innerHTML = '';
 
-    const img = document.createElement('img');
+    img = document.createElement('img');
     img.src = photos[currentPhotoIndex].img_src;
     img.alt = `Rover photo taken on Sol ${photos[currentPhotoIndex].sol}`;
     img.className = 'rover-photo';
     roverPhotosDiv.appendChild(img);
 
     img.addEventListener('click', () => {
+        console.log('clicked')
+        fullscreenPhoto();
+    });
+
+    roverPhotosDiv.appendChild(img);
+}
+
+function fullscreenPhoto() {
     const modal = document.getElementById('photoModal');
     const modalImg = document.getElementById('modalImage');
     const captionText = document.getElementById('modalCaption');
@@ -219,9 +229,6 @@ function displayRoverPhotos(photos) {
     modal.style.display = 'block';
     modalImg.src = photos[currentPhotoIndex].img_src;
     captionText.innerHTML = `Rover: ${photos[currentPhotoIndex].rover.name}<br>Date: ${photos[currentPhotoIndex].earth_date}<br>Camera: ${photos[currentPhotoIndex].camera.full_name}`;
-    });
-
-    roverPhotosDiv.appendChild(img);
 }
 
 function showNextPhoto(photos) {
@@ -234,36 +241,30 @@ function showPreviousPhoto(photos) {
     displayRoverPhotos(photos);
 }
 
-
 const sol = 1000;
 const roverName = 'curiosity';
-
-let photos = [];
 
 fetchRoverPhotos(sol, roverName).then(fetchedPhotos => {
     photos = fetchedPhotos.reverse();
     displayRoverPhotos(photos);
 });
 
-
-
-
 document.addEventListener('DOMContentLoaded', () => {
     getMarsWeather();
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-const modal = document.getElementById('photoModal');
-const closeModal = document.querySelector('.close-modal');
+    const modal = document.getElementById('photoModal');
+    const closeModal = document.querySelector('.close-modal');
 
-closeModal.addEventListener('click', () => {
-    modal.style.display = 'none';
-});
+    closeModal.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
 
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-    modal.style.display = 'none';
-    }
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            modal.style.display = 'none';
+        }
     });
 });
 
