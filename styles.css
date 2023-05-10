@@ -424,7 +424,7 @@ button {
 @media (min-width: 768px) {
   .button-container {
       position: absolute;
-      top: 0;
+      top: 50%;
       left: 0;
       width: 100%;
       display: flex;
