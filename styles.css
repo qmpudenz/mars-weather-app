@@ -369,11 +369,6 @@ button {
     flex-direction: column;
   }
   
-  .rover-photo {
-    max-height: 50vh;
-    max-width: 80vw;
-  }
-  
   .modal-content {
     width: 90%;
   }
@@ -408,7 +403,7 @@ button {
     display: flex;
     max-height: 90vw;
     max-width: 90vw;
-    margin: 24px 0;
+    margin-top:28px;
   }
 }
 
@@ -420,7 +415,7 @@ button {
 .button-container {
   position: absolute;
   top: 20vw;
-  width: 100%;
+  width: 95%;
   justify-content: center;
   display: flex;
   z-index: 1000;
