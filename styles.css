@@ -141,7 +141,7 @@ h2, h3 {
 
 .marsDate {
   font-weight: bold;
-  font-size: 5vw;
+  font-size: 4.75vw;
   margin:0;
   justify-content:left;
 }
@@ -419,7 +419,7 @@ button {
 
 .button-container {
   position: absolute;
-  bottom: 0;
+  top: 20vw;
   width: 100%;
   justify-content: center;
   display: flex;

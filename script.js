@@ -27,19 +27,6 @@ function displayWeatherData(weatherData) {
         sunrise,
         sunset
     } = weatherData.latestSolData;
-
-    function addDaySuffix(day) {
-        switch (day % 10) {
-        case 1:
-            return day + 'st';
-        case 2:
-            return day + 'nd';
-        case 3:
-            return day + 'rd';
-        default:
-            return day + 'th';
-        }
-    }
         
     function formattedDate(dateString) {
         const date = new Date(dateString);
