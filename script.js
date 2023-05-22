@@ -114,7 +114,7 @@ function displayWeatherData(weatherData) {
           x: {
             ticks: {
               font: {
-                size: 12, // Decrease the font size for smaller screens
+                size: 16, // Decrease the font size for smaller screens
               },
               color: "white",
             },
@@ -123,7 +123,7 @@ function displayWeatherData(weatherData) {
             beginAtZero: true,
             ticks: {
               font: {
-                size: 12, // Decrease the font size for smaller screens
+                size: 16, // Decrease the font size for smaller screens
                 weight: "lighter",
               },
               color: "white",
@@ -138,7 +138,7 @@ function displayWeatherData(weatherData) {
             display: true,
             text: "Weekly Temperatures",
             font: {
-              size: 28, // Decrease the font size for smaller screens
+              size: 30, // Decrease the font size for smaller screens
             },
             "padding-bottom": 40,
             color: "white",
@@ -163,7 +163,7 @@ function displayWeatherData(weatherData) {
             position: "bottom",
             labels: {
               font: {
-                size: 12, // Decrease the font size for smaller screens
+                size: 16, // Decrease the font size for smaller screens
                 weight: "lighter",
               },
               padding: 10,

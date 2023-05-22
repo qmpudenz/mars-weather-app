@@ -14,7 +14,7 @@ body {
 }
 
 h1 {
-  font-size: 60px;
+  font-size: 3.75rem;
   text-align: center;
   margin-top: 30px;
   margin-bottom: 30px;
@@ -28,8 +28,9 @@ h1 {
   align-items: center;
   justify-content: space-between;
   padding: 30px;
-  background-color: #313131;
-  height:200px;
+  background-color: #2a2a2a;
+  height: 200px;
+  border: white 4px solid;
 }
 
 .chart-container {
@@ -39,9 +40,10 @@ h1 {
   align-items: center;
   justify-content: space-between;
   padding: 30px;
-  background-color: #313131;
+  background-color: #2a2a2a;
   height: 60vh;
   min-height: 400px;
+  border: white 4px solid;
 }
 
 .temperatureChart {
@@ -62,7 +64,7 @@ h1 {
   text-align: flex-end;
   justify-content: left;
   font-weight: lighter;
-  font-size: 2vw;
+  font-size: 1.125rem;
 }
 
 h2, h3 {
@@ -70,14 +72,14 @@ h2, h3 {
   align-items: center;
   margin-bottom: 10px;
   font-weight: normal;
-  font-size: 2vw;
+  font-size: 1.5rem;
   justify-content: center;
 }
 
 .subInfo {
   display: flex;
   align-items: center;
-  font-size: 2vw;
+  font-size: 1.2rem;
   font-weight: lighter;
   margin-top: 0;
   margin-bottom: 0px;
@@ -94,7 +96,7 @@ h2, h3 {
 .tempDiv {
   display: flex;
   align-items: center;
-  font-size: 4vw;
+  font-size: 2.5rem;
   margin-top: 0;
   margin-bottom: 0px;
 }
@@ -129,25 +131,29 @@ h2, h3 {
 }
 
 .additionalInfo {
-  width: 26vw;
+  width: fit-content;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;  
-  border-width: 1px;
+  justify-content: space-around;
+  border-width: 3px;
   border-style: solid;
   border-color: #fff;
+  padding: 0 16px;
+  min-width: 20vw;
+  background-color: #222222;
+  padding-bottom: 16px;
 }
 
 .marsDate {
   font-weight: bold;
-  font-size: 4.75vw;
+  font-size: 2.7rem;
   margin:0;
   justify-content:left;
 }
 
 .earthDate {
-  font-size:2.5vw;
+  font-size:1.5rem;
   margin:0;
   height:auto;
   justify-content: left;
@@ -197,6 +203,11 @@ button {
 .button-left {
   display: flex;
   justify-self: left;
+}
+
+.button-arrow {
+  background-color: rgba(0, 0, 0, 0.400);
+  border-radius: 50%;
 }
 
 .rover-photo {
@@ -255,9 +266,11 @@ button {
 }
 
 .pictureTitle {
-  margin-bottom: 0;
-  margin-top:0;
-  font-size: 5vw;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  font-size: 2.2rem;
+  justify-content: center;
+  text-align: center;
 }
 
 /* Default styles for chart title */
@@ -265,13 +278,13 @@ button {
   font-size: 40px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   h1 {
-    font-size: 40px;
+    font-size: 2.5rem;
   }
 
   h2, h3 {
-    font-size: 6vw;
+    font-size: 1.2rem;
   }
   
   .weather-container {
@@ -284,7 +297,7 @@ button {
   .tempDiv {
     display: flex;
     align-items: center;
-    font-size: 12vw;
+    font-size: 2.75rem;
     margin-top: 0;
     margin-bottom: 0px;
   }
@@ -297,13 +310,14 @@ button {
   }
   
   .subheader {
-    font-size: 4vw;
+    font-size: 1.75rem;
+    justify-content: center;
   }
 
   .subInfo {
     display: flex;
     align-items: center;
-    font-size: 6vw;
+    font-size: 1.2rem;
     font-weight: lighter;
     margin-top: 0;
     margin-bottom: 0px;
@@ -333,19 +347,20 @@ button {
   }
   
   .additionalInfo {
-    width: 100%;
+    width: fit-content;
     margin-top: 20px;
-    padding-bottom: 24px;
+    padding: 0 16px;
+    padding-bottom: 16px;
   }
   
   .marsDate {
     justify-content: center;
-    font-size: 8vw;
+    font-size: 2.25rem;
   }
   
   .earthDate {
     justify-content: center;
-    font-size: 5vw;
+    font-size: 1.35rem;
     font-weight: 200;
   }
   
@@ -355,18 +370,19 @@ button {
   }
 
   .pictureTitle {
-    font-size: 6.5vw;
+    font-size: 1.75rem;
   }
   
 
   .subheader {
-    font-size: 6vw;
+    font-size: 2rem;
   }
   
   .slide {
     height: auto;
     padding: 20px;
     flex-direction: column;
+    min-height: 250px;
   }
   
   .modal-content {
@@ -403,7 +419,6 @@ button {
     display: flex;
     max-height: 90vw;
     max-width: 90vw;
-    margin-top:28px;
   }
 }
 
@@ -414,14 +429,14 @@ button {
 
 .button-container {
   position: absolute;
-  top: 20vw;
-  width: 95%;
-  justify-content: center;
+  top: 50%;
+  width: 100%;
+  justify-content: space-around;
   display: flex;
   z-index: 1000;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 900px) {
   .button-container {
       position: absolute;
       top: 50%;
