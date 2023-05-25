@@ -13,6 +13,7 @@
 
 </head>
 <body>
+    <div class="background">
     <h1>Mars Weather</h1>
     <div class="weather-container">
         <div class="date">
@@ -58,6 +59,7 @@
         <canvas id="temperatureChart"></canvas>
     </div>
     <div class="photo-container">
+        <div class="slide-container">
         <h2 class="pictureTitle">Recent Views from Curiousity</h2>
         <div class="slide">
             <div class="button-container">
@@ -75,7 +77,7 @@
             </div>
 
         </div>
-        
+    </div>
     </div>
     
     <div id="photoModal" class="photo-modal">
@@ -86,6 +88,21 @@
 
 
   
+    </div>
 
+
+
+    <script>
+// Get the dark mode toggle element
+const darkModeToggle = document.getElementById('darkModeToggle');
+
+// Listen for changes in the toggle state
+darkModeToggle.addEventListener('change', () => {
+  // Toggle the dark mode class on the body element
+  document.body.classList.toggle('dark-mode');
+});
+
+      </script>
+      
 </body>
 </html>
