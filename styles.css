@@ -299,6 +299,7 @@ button {
 
 @media (max-width: 900px) {
   body {
+    background-image: url(rock-soil-surface-vert.jpg);
     background-attachment: scroll; /* Disable parallax effect on mobile */
   }
 
