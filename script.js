@@ -1,10 +1,20 @@
 document.addEventListener("DOMContentLoaded", () => {
-  document
-    .getElementById("previous-photo")
-    .addEventListener("click", () => showPreviousPhoto(photos));
-  document
-    .getElementById("next-photo")
-    .addEventListener("click", () => showNextPhoto(photos));
+  // Initialize event listeners for photo navigation
+  const prevBtn = document.getElementById("previous-photo");
+  const nextBtn = document.getElementById("next-photo");
+  
+  if (prevBtn) {
+    prevBtn.addEventListener("click", () => showPreviousPhoto(photos));
+  }
+  if (nextBtn) {
+    nextBtn.addEventListener("click", () => showNextPhoto(photos));
+  }
+
+  // Initialize weather data
+  getMarsWeather();
+  
+  // Initialize modal functionality
+  initializeModal();
 });
 
 async function getMarsWeather() {
@@ -13,12 +23,25 @@ async function getMarsWeather() {
     displayWeatherData(data);
   } catch (error) {
     console.error("Error:", error);
+    // Show error state in UI
+    showErrorState();
   }
+}
+
+function showErrorState() {
+  document.getElementById("solDate").innerText = "ERROR";
+  document.getElementById("earthDate").innerText = "Unable to connect to Mars";
+  document.getElementById("highTemperature").innerText = "--°F";
+  document.getElementById("lowTemperature").innerText = "--°F";
+  document.getElementById("pressure").innerText = "--- Pa";
+  document.getElementById("sunrise").innerText = "--:-- LMST";
+  document.getElementById("sunset").innerText = "--:-- LMST";
 }
 
 function displayWeatherData(weatherData) {
   if (!weatherData || !weatherData.latestSolData) {
     console.error("Error: Invalid weather data");
+    showErrorState();
     return;
   }
 
@@ -60,7 +83,8 @@ function displayWeatherData(weatherData) {
     return formatted.replace(/\d{1,2}/, day + suffix);
   }
 
-  document.getElementById("solDate").innerText = "Sol " + solDate;
+  // Update UI with weather data
+  document.getElementById("solDate").innerText = solDate;
   document.getElementById("earthDate").innerText = formattedDate(earthDate);
   document.getElementById("highTemperature").innerText = highTemperature + "°F";
   document.getElementById("lowTemperature").innerText = lowTemperature + "°F";
@@ -68,6 +92,7 @@ function displayWeatherData(weatherData) {
   document.getElementById("sunrise").innerText = sunrise;
   document.getElementById("sunset").innerText = sunset;
 
+  // Prepare temperature chart data
   const temperatureData = weatherData.solData.map((solData) => {
     const highTemp = parseInt(solData.max_temp);
     const lowTemp = parseInt(solData.min_temp);
@@ -86,7 +111,13 @@ function displayWeatherData(weatherData) {
 
 function renderTemperatureChart(temperatureData) {
   const ctx = document.getElementById("temperatureChart").getContext("2d");
-  const chart = new Chart(ctx, {
+  
+  // Destroy existing chart if it exists
+  if (window.temperatureChart instanceof Chart) {
+    window.temperatureChart.destroy();
+  }
+  
+  window.temperatureChart = new Chart(ctx, {
     type: "line",
     data: {
       labels: temperatureData.map((data) => {
@@ -98,80 +129,113 @@ function renderTemperatureChart(temperatureData) {
         {
           label: "High Temperature",
           data: temperatureData.map((data) => data.high),
-          backgroundColor: "rgba(255, 99, 132, 0.2)",
-          borderColor: "rgba(255, 99, 132, 1)",
-          borderWidth: 2, // Decrease the border width for smaller screens
+          backgroundColor: "rgba(255, 107, 53, 0.1)",
+          borderColor: "#FF6B35",
+          borderWidth: 3,
+          pointBackgroundColor: "#FF6B35",
+          pointBorderColor: "#FF6B35",
+          pointRadius: 6,
+          pointHoverRadius: 8,
+          tension: 0.3,
         },
         {
           label: "Low Temperature",
           data: temperatureData.map((data) => data.low),
-          backgroundColor: "rgba(75, 192, 192, 0.2)",
-          borderColor: "rgba(75, 192, 192, 1)",
-          borderWidth: 2, // Decrease the border width for smaller screens
+          backgroundColor: "rgba(0, 212, 255, 0.1)",
+          borderColor: "#00D4FF",
+          borderWidth: 3,
+          pointBackgroundColor: "#00D4FF",
+          pointBorderColor: "#00D4FF",
+          pointRadius: 6,
+          pointHoverRadius: 8,
+          tension: 0.3,
         },
       ],
     },
     options: {
-      responsive: true, // Set responsive to true for the chart to adjust to smaller screens
-      maintainAspectRatio: false, // Set maintainAspectRatio to false to allow the chart to resize to its container
-      scales: {
-        x: {
-          ticks: {
-            font: {
-              size: 16, // Decrease the font size for smaller screens
-            },
-            color: "white",
-          },
-        },
-        y: {
-          beginAtZero: true,
-          ticks: {
-            font: {
-              size: 16, // Decrease the font size for smaller screens
-              weight: "lighter",
-            },
-            color: "white",
-            callback: function (value) {
-              return value + "°F";
-            },
-          },
-        },
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: {
+        intersect: false,
+        mode: 'index'
       },
       plugins: {
         title: {
           display: true,
-          text: "Weekly Temperatures",
+          text: "7-DAY TEMPERATURE ANALYSIS",
           font: {
-            size: 30, // Decrease the font size for smaller screens
+            family: "'Orbitron', monospace",
+            size: 16,
+            weight: '700'
           },
-          "padding-bottom": 40,
-          color: "white",
-          className: "chart-title",
+          color: "#00D4FF",
+          padding: {
+            bottom: 20
+          }
         },
         tooltip: {
-          backgroundColor: "rgba(0, 0, 0, 0.8)",
+          backgroundColor: "rgba(15, 20, 25, 0.95)",
           titleFont: {
-            size: 16, // Decrease the font size for smaller screens
+            family: "'Share Tech Mono', monospace",
+            size: 14,
           },
           bodyFont: {
-            size: 16, // Decrease the font size for smaller screens
+            family: "'Share Tech Mono', monospace",
+            size: 13,
           },
-          footerFont: {
-            size: 16, // Decrease the font size for smaller screens
-          },
-          padding: 10,
-          displayColors: false,
+          titleColor: "#00D4FF",
+          bodyColor: "#ffffff",
+          borderColor: "#2a2a2a",
+          borderWidth: 1,
+          padding: 12,
+          displayColors: true,
+          cornerRadius: 8,
         },
         legend: {
           display: true,
           position: "bottom",
           labels: {
             font: {
-              size: 16, // Decrease the font size for smaller screens
-              weight: "lighter",
+              family: "'Share Tech Mono', monospace",
+              size: 12,
             },
+            padding: 20,
+            color: "#b0b0b0",
+            usePointStyle: true,
+            pointStyle: 'circle'
+          },
+        },
+      },
+      scales: {
+        x: {
+          grid: {
+            color: "rgba(255, 255, 255, 0.1)",
+            borderColor: "#2a2a2a",
+          },
+          ticks: {
+            font: {
+              family: "'Share Tech Mono', monospace",
+              size: 11,
+            },
+            color: "#b0b0b0",
             padding: 10,
-            color: "white",
+          },
+        },
+        y: {
+          grid: {
+            color: "rgba(255, 255, 255, 0.1)",
+            borderColor: "#2a2a2a",
+          },
+          ticks: {
+            font: {
+              family: "'Share Tech Mono', monospace",
+              size: 11,
+            },
+            color: "#b0b0b0",
+            padding: 10,
+            callback: function (value) {
+              return value + "°F";
+            },
           },
         },
       },
@@ -183,27 +247,47 @@ async function fetchRoverPhotos(sol, roverName) {
   const apiKey = "DB6sVUROk8cG7IvNWDC11xZL5U3NLIHGLEsAK6jo";
   const apiUrl = `https://api.nasa.gov/mars-photos/api/v1/rovers/${roverName}/photos?sol=${sol}&api_key=${apiKey}`;
 
-  const response = await fetch(apiUrl);
-  const data = await response.json();
-  return data.photos;
+  try {
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    return data.photos || [];
+  } catch (error) {
+    console.error("Error fetching rover photos:", error);
+    return [];
+  }
 }
 
 let photos = [];
 let currentPhotoIndex = 0;
-let img; // declare img variable in the global scope
 
 function displayRoverPhotos(photos) {
   const roverPhotosDiv = document.getElementById("rover-photos");
   roverPhotosDiv.innerHTML = "";
 
-  img = document.createElement("img");
+  if (!photos || photos.length === 0) {
+    roverPhotosDiv.innerHTML = '<div style="color: #808080; text-align: center; font-family: \'Share Tech Mono\', monospace;">No images available</div>';
+    return;
+  }
+
+  const img = document.createElement("img");
   img.src = photos[currentPhotoIndex].img_src;
   img.alt = `Rover photo taken on Sol ${photos[currentPhotoIndex].sol}`;
   img.className = "rover-photo";
-  roverPhotosDiv.appendChild(img);
+  
+  // Add loading state
+  img.addEventListener('load', () => {
+    img.style.opacity = '1';
+  });
+  
+  img.addEventListener('error', () => {
+    img.alt = 'Image failed to load';
+    img.style.opacity = '0.5';
+  });
+  
+  img.style.opacity = '0.7';
+  img.style.transition = 'opacity 0.3s ease';
 
   img.addEventListener("click", () => {
-    console.log("clicked");
     fullscreenPhoto();
   });
 
@@ -211,50 +295,71 @@ function displayRoverPhotos(photos) {
 }
 
 function fullscreenPhoto() {
+  if (!photos || photos.length === 0) return;
+  
   const modal = document.getElementById("photoModal");
   const modalImg = document.getElementById("modalImage");
   const captionText = document.getElementById("modalCaption");
 
   modal.style.display = "block";
   modalImg.src = photos[currentPhotoIndex].img_src;
-  captionText.innerHTML = `Rover: ${photos[currentPhotoIndex].rover.name}<br>Date: ${photos[currentPhotoIndex].earth_date}<br>Camera: ${photos[currentPhotoIndex].camera.full_name}`;
+  
+  const photo = photos[currentPhotoIndex];
+  captionText.innerHTML = `
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; text-align: left;">
+      <div><strong>ROVER:</strong> ${photo.rover.name.toUpperCase()}</div>
+      <div><strong>SOL:</strong> ${photo.sol}</div>
+      <div><strong>EARTH DATE:</strong> ${photo.earth_date}</div>
+      <div><strong>CAMERA:</strong> ${photo.camera.full_name}</div>
+    </div>
+  `;
 }
 
 function showNextPhoto(photos) {
+  if (!photos || photos.length === 0) return;
   currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
   displayRoverPhotos(photos);
 }
 
 function showPreviousPhoto(photos) {
+  if (!photos || photos.length === 0) return;
   currentPhotoIndex = (currentPhotoIndex - 1 + photos.length) % photos.length;
   displayRoverPhotos(photos);
 }
 
+function initializeModal() {
+  const modal = document.getElementById("photoModal");
+  const closeModal = document.querySelector(".close-modal");
+
+  if (closeModal) {
+    closeModal.addEventListener("click", () => {
+      modal.style.display = "none";
+    });
+  }
+
+  // Close modal on escape key or clicking outside
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && modal.style.display === "block") {
+      modal.style.display = "none";
+    }
+  });
+
+  modal.addEventListener("click", (event) => {
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+}
+
+// Initialize rover photos
 const sol = 1000;
 const roverName = "curiosity";
 
 fetchRoverPhotos(sol, roverName).then((fetchedPhotos) => {
   photos = fetchedPhotos.reverse();
   displayRoverPhotos(photos);
+}).catch(error => {
+  console.error("Error loading rover photos:", error);
+  photos = [];
+  displayRoverPhotos([]);
 });
-
-document.addEventListener("DOMContentLoaded", () => {
-  getMarsWeather();
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  const modal = document.getElementById("photoModal");
-  const closeModal = document.querySelector(".close-modal");
-
-  closeModal.addEventListener("click", () => {
-    modal.style.display = "none";
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      modal.style.display = "none";
-    }
-  });
-});
-
-document.addEventListener("DOMContentLoaded", fetchData);
