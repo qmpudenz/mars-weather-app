@@ -4,182 +4,329 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mars Weather</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Mars Weather Station | NASA Mission Control</title>
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css"
     />
-    <script src="scrape_weather.js"></script>
-    <script src="script.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <script type="module" src="main.js"></script>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="background">
-      <h1>Mars Weather</h1>
-      <div class="weather-container">
-        <div class="date">
-          <div class="dates">
-            <h2 class="marsDate"><span id="solDate"></span></h2>
-            <h3 class="earthDate"><span id="earthDate"></span></h3>
-          </div>
-
-          <div class="subheaderContainer">
-            <p class="subheader">
-              Latest from Gale Crater via the Curiosity Rover
-            </p>
-          </div>
+    <div class="mission-control">
+      <!-- Header Section -->
+      <header class="mission-header">
+        <div class="nasa-logo">
+          <div class="logo-text">NASA</div>
+          <div class="mission-designation">MARS WEATHER STATION</div>
         </div>
-        <div class="temperature">
-          <div class="highAndLow">
-            <p class="tempDiv">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="32"
-                height="32"
-                fill="currentColor"
-                class="bi bi-thermometer-high"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M9.5 12.5a1.5 1.5 0 1 1-2-1.415V2.5a.5.5 0 0 1 1 0v8.585a1.5 1.5 0 0 1 1 1.415z"
-                />
-                <path
-                  d="M5.5 2.5a2.5 2.5 0 0 1 5 0v7.55a3.5 3.5 0 1 1-5 0V2.5zM8 1a1.5 1.5 0 0 0-1.5 1.5v7.987l-.167.15a2.5 2.5 0 1 0 3.333 0l-.166-.15V2.5A1.5 1.5 0 0 0 8 1z"
-                /></svg
-              >High:&nbsp;<span id="highTemperature"></span>
-            </p>
-            <p class="tempDiv">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="32"
-                height="32"
-                fill="currentColor"
-                class="bi bi-thermometer-low"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M9.5 12.5a1.5 1.5 0 1 1-2-1.415V9.5a.5.5 0 0 1 1 0v1.585a1.5 1.5 0 0 1 1 1.415z"
-                />
-                <path
-                  d="M5.5 2.5a2.5 2.5 0 0 1 5 0v7.55a3.5 3.5 0 1 1-5 0V2.5zM8 1a1.5 1.5 0 0 0-1.5 1.5v7.987l-.167.15a2.5 2.5 0 1 0 3.333 0l-.166-.15V2.5A1.5 1.5 0 0 0 8 1z"
-                /></svg
-              >Low:&nbsp;<span id="lowTemperature"></span>
-            </p>
+        <div class="status-indicator">
+          <div class="status-dot active"></div>
+          <span>LIVE CONNECTION</span>
+          <div class="data-freshness">
+            <span class="freshness-label">LAST UPDATE</span>
+            <span class="freshness-time" id="lastUpdateTime">--</span>
+            <span class="data-delay-warning">DATA DELAY: ~7 DAYS</span>
           </div>
-        </div>
-        <div class="additionalInfo">
-          <h3>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="32"
-              height="32"
-              fill="currentColor"
-              class="bi bi-sunrise"
-              viewBox="0 0 16 16"
-            >
-              <path
-                d="M7.646 1.146a.5.5 0 0 1 .708 0l1.5 1.5a.5.5 0 0 1-.708.708L8.5 2.707V4.5a.5.5 0 0 1-1 0V2.707l-.646.647a.5.5 0 1 1-.708-.708l1.5-1.5zM2.343 4.343a.5.5 0 0 1 .707 0l1.414 1.414a.5.5 0 0 1-.707.707L2.343 5.05a.5.5 0 0 1 0-.707zm11.314 0a.5.5 0 0 1 0 .707l-1.414 1.414a.5.5 0 1 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zM8 7a3 3 0 0 1 2.599 4.5H5.4A3 3 0 0 1 8 7zm3.71 4.5a4 4 0 1 0-7.418 0H.499a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1h-3.79zM0 10a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2A.5.5 0 0 1 0 10zm13 0a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"
-              /></svg
-            >&nbsp;Sunrise:&nbsp;
-            <div class="subInfo"><span id="sunrise"></span>&nbsp;(LMST)</div>
-          </h3>
-
-          <h3>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="32"
-              height="32"
-              fill="currentColor"
-              class="bi bi-speedometer"
-              viewBox="0 0 16 16"
-            >
-              <path
-                d="M8 2a.5.5 0 0 1 .5.5V4a.5.5 0 0 1-1 0V2.5A.5.5 0 0 1 8 2zM3.732 3.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707zM2 8a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8zm9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5zm.754-4.246a.389.389 0 0 0-.527-.02L7.547 7.31A.91.91 0 1 0 8.85 8.569l3.434-4.297a.389.389 0 0 0-.029-.518z"
-              />
-              <path
-                fill-rule="evenodd"
-                d="M6.664 15.889A8 8 0 1 1 9.336.11a8 8 0 0 1-2.672 15.78zm-4.665-4.283A11.945 11.945 0 0 1 8 10c2.186 0 4.236.585 6.001 1.606a7 7 0 1 0-12.002 0z"
-              /></svg
-            >&nbsp;Pressure:&nbsp;
-            <div class="subInfo"><span id="pressure"></span>&nbsp;(Pa)</div>
-          </h3>
-
-          <h3>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="32"
-              height="32"
-              fill="currentColor"
-              class="bi bi-sunset"
-              viewBox="0 0 16 16"
-            >
-              <path
-                d="M7.646 4.854a.5.5 0 0 0 .708 0l1.5-1.5a.5.5 0 0 0-.708-.708l-.646.647V1.5a.5.5 0 0 0-1 0v1.793l-.646-.647a.5.5 0 1 0-.708.708l1.5 1.5zm-5.303-.51a.5.5 0 0 1 .707 0l1.414 1.413a.5.5 0 0 1-.707.707L2.343 5.05a.5.5 0 0 1 0-.707zm11.314 0a.5.5 0 0 1 0 .706l-1.414 1.414a.5.5 0 1 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zM8 7a3 3 0 0 1 2.599 4.5H5.4A3 3 0 0 1 8 7zm3.71 4.5a4 4 0 1 0-7.418 0H.499a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1h-3.79zM0 10a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2A.5.5 0 0 1 0 10zm13 0a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"
-              /></svg
-            >&nbsp;Sunset:&nbsp;
-            <div class="subInfo"><span id="sunset"></span>&nbsp;(LMST)</div>
-          </h3>
-        </div>
-      </div>
-
-      <div class="chart-container">
-        <canvas id="temperatureChart"></canvas>
-      </div>
-      <div class="photo-container">
-        <div class="slide-container">
-          <h2 class="pictureTitle">Recent Views from Curiousity</h2>
-          <div class="slide">
-            <div class="button-container">
-              <button
-                class="button-left"
-                id="previous-photo"
-                onclick="showPreviousPhoto(photos)"
-              >
-                <svg
-                  class="button-arrow"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="50"
-                  height="50"
-                  fill="currentColor"
-                  class="bi bi-arrow-left-circle"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"
-                  />
-                </svg>
-              </button>
-              <button id="next-photo" onclick="showNextPhoto(photos)">
-                <svg
-                  class="button-arrow"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="50"
-                  height="50"
-                  fill="currentColor"
-                  class="bi bi-arrow-right-circle"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"
-                  />
-                </svg>
-              </button>
+          <!-- <div class="stream-control">
+            <div class="toggle-switch" id="streamToggle">
+              <div class="toggle-slider"></div>
+              <div class="toggle-labels">
+                <span class="toggle-label">STANDBY</span>
+                <span class="toggle-label">ACTIVE</span>
+              </div>
             </div>
-            <div id="rover-photos">
-              <!-- Rover photos will be displayed here -->
+            <span class="stream-label">LIVE DATA STREAM</span>
+          </div>
+        </div>end comment out for now -->
+      </header>
+
+      <!-- Main Control Panel -->
+      <main class="control-panel">
+        <!-- Primary Data Panel -->
+        <section class="data-panel primary-panel">
+          <div class="panel-header">
+            <h2>CURRENT CONDITIONS</h2>
+            <div class="panel-status">
+              <div class="location-info">
+                <span class="coordinates">4.5°S 137.4°E</span>
+                <span class="location">GALE CRATER</span>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+          
+          <div class="weather-grid">
+            <!-- Sol and Date Info -->
+            <div class="info-block sol-info">
+              <div class="data-label">MISSION SOL</div>
+              <div class="data-value large" id="solDate">---</div>
+              <div class="data-sublabel" id="earthDate">Loading...</div>
+            </div>
 
-      <div id="photoModal" class="photo-modal">
+            <!-- Temperature Display -->
+            <div class="info-block temperature-block">
+              <div class="temp-container-display">
+                <div class="temp-reading-display high-temp">
+                  <div class="temp-icon">
+                    <svg width="full" height="full" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 2v10l3-3m-3 3l-3-3m3 3v8" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                  </div>
+                  <div class="temp-data-display">
+                    <span class="temp-label">HIGH</span>
+                    <span class="temp-value-display" id="highTemperature">--°F</span>
+                  </div>
+                </div>
+                <div class="temp-reading-display low-temp">
+                  <div class="temp-icon">
+                    <svg width="full" height="full" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 22v-10l3 3m-3-3l-3 3m3-3V2" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                  </div>
+                  <div class="temp-data-display">
+                    <span class="temp-label">LOW</span>
+                    <span class="temp-value-display" id="lowTemperature">--°F</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Environmental Data -->
+            <div class="info-block env-data">
+              <div class="env-item">
+                <div class="env-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                    <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2"/>
+                  </svg>
+                </div>
+                <div class="env-info">
+                  <span class="env-label">PRESSURE</span>
+                  <span class="env-value" id="pressure">--- Pa</span>
+                </div>
+              </div>
+              
+              <div class="env-item">
+                <div class="env-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
+                    <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1" stroke="currentColor" stroke-width="2"/>
+                  </svg>
+                </div>
+                <div class="env-info">
+                  <span class="env-label">SUNRISE</span>
+                  <span class="env-value" id="sunrise">--:-- LMST</span>
+                </div>
+              </div>
+
+              <div class="env-item">
+                <div class="env-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
+                    <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42m0-16.48l-1.42 1.42M5.64 17.36l-1.42 1.42M1 12h2m18 0h2" stroke="currentColor" stroke-width="2"/>
+                  </svg>
+                </div>
+                <div class="env-info">
+                  <span class="env-label">SUNSET</span>
+                  <span class="env-value" id="sunset">--:-- LMST</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Alert System Panel -->
+            <div class="info-block alert-panel">
+              <div class="alert-header">
+                <span class="alert-title">ALERT SYSTEM</span>
+                <div class="alert-status" id="alertStatus">STANDBY</div>
+              </div>
+              <div class="alert-indicators">
+                <div class="alert-led" id="dustAlert" data-alert="dust">
+                  <div class="led-light"></div>
+                  <span class="led-label">DUST STORM</span>
+                </div>
+                <div class="alert-led" id="tempAlert" data-alert="temp">
+                  <div class="led-light"></div>
+                  <span class="led-label">EXTREME TEMP</span>
+                </div>
+                <div class="alert-led" id="pressureAlert" data-alert="pressure">
+                  <div class="led-light"></div>
+                  <span class="led-label">LOW PRESSURE</span>
+                </div>
+                <div class="alert-led" id="windAlert" data-alert="wind">
+                  <div class="led-light"></div>
+                  <span class="led-label">HIGH WIND</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Chart Panel -->
+        <section class="data-panel chart-panel">
+          <div class="panel-header">
+            <h2>TEMPERATURE ANALYSIS</h2>
+            <div class="chart-controls">
+              <div class="rotary-selector" id="chartModeSelector">
+                <div class="rotary-dial">
+                  <div class="dial-indicator"></div>
+                  <div class="dial-positions">
+                    <div class="dial-position" data-mode="line">LINE</div>
+                    <div class="dial-position" data-mode="bar">BAR</div>
+                    <div class="dial-position" data-mode="radar">RADAR</div>
+                    <div class="dial-position" data-mode="multi">MULTI</div>
+                  </div>
+                </div>
+                <span class="selector-label">CHART MODE</span>
+              </div>
+            </div>
+          </div>
+          <div class="temperature-analysis">
+            <div class="analysis-header">
+              <div class="period-selector">
+                <button class="period-btn active" data-period="7">7 DAYS</button>
+                <button class="period-btn" data-period="30">30 DAYS</button>
+              </div>
+              <div class="analysis-summary" id="analysisSummary">
+                <div class="summary-item">
+                  <span class="summary-label">AVG HIGH</span>
+                  <span class="summary-value" id="avgHigh">--°F</span>
+                </div>
+                <div class="summary-item">
+                  <span class="summary-label">AVG LOW</span>
+                  <span class="summary-value" id="avgLow">--°F</span>
+                </div>
+                <div class="summary-item">
+                  <span class="summary-label">RANGE</span>
+                  <span class="summary-value" id="tempRange">--°F</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="temperature-scroll-container">
+              <div class="temperature-scroll" id="temperatureScroll">
+                <!-- Temperature days will be rendered here -->
+              </div>
+            </div>
+            
+            <div class="analysis-footer">
+              <div class="trend-indicator" id="trendIndicator">
+                <span class="trend-label">TREND</span>
+                <span class="trend-value" id="trendValue">--</span>
+              </div>
+              <div class="extreme-values">
+                <div class="extreme-item">
+                  <span class="extreme-label">HIGHEST</span>
+                  <span class="extreme-value" id="highestTemp">--°F</span>
+                </div>
+                <div class="extreme-item">
+                  <span class="extreme-label">LOWEST</span>
+                  <span class="extreme-value" id="lowestTemp">--°F</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Image Panel -->
+        <section class="data-panel image-panel">
+          <div class="panel-header">
+            <h2>SURFACE IMAGERY</h2>
+            
+            <!-- Search Range Display -->
+            <div class="search-range-display">
+              <span class="range-label">SEARCH RANGE:</span>
+              <span class="range-value" id="searchRange">INITIALIZING...</span>
+            </div>
+            
+            <div class="image-controls">
+              <span class="rover-info">CURIOSITY ROVER</span>
+              <div class="image-counter" id="imageCounter">
+                <span class="counter-text">IMAGE <span id="currentImage">--</span> OF <span id="totalImages">--</span></span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Sol Search Indicator -->
+          <div class="sol-search-indicator">
+            <div class="search-info">
+              <span class="search-label">PHOTO SEARCH</span>
+              <span class="search-value" id="solSearchInfo">SEARCHING...</span>
+            </div>
+          </div>
+          
+          <div class="image-viewer">
+            <div class="image-content">
+              <div class="main-image-container">
+                <div class="image-navigation">
+                  <button class="nav-btn prev-btn" id="previous-photo">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                  </button>
+                  <button class="nav-btn next-btn" id="next-photo">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                  </button>
+                </div>
+                
+                <div id="rover-photos" class="photo-display">
+                  <!-- Main rover photo will be displayed here -->
+                </div>
+                <div class="image-loading" id="imageLoading">
+                  <div class="loading-spinner"></div>
+                  <span class="loading-text">ACQUIRING IMAGE</span>
+                </div>
+                
+                <div class="image-camera-info">
+                  <span class="camera-label" id="cameraInfo">--</span>
+                </div>
+              </div>
+              
+              <div class="camera-filter-panel">
+                <div class="filter-header">
+                  <span class="filter-label">CAMERA FILTER</span>
+                  <span class="active-filter" id="activeFilter">ALL CAMERAS</span>
+                </div>
+                <div class="camera-buttons">
+                  <!-- Camera buttons will be generated dynamically -->
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="thumbnail-gallery" id="thumbnailGallery">
+            <!-- Thumbnail images will be displayed here -->
+          </div>
+        </section>
+      </main>
+
+      <!-- System Footer -->
+      <footer class="system-footer">
+        <div class="system-info">
+          <span>CURIOSITY ROVER</span>
+          <span>|</span>
+          <span>GALE CRATER</span>
+          <span>|</span>
+          <span>NASA JPL</span>
+        </div>
+        <div class="data-source">
+          Data from NASA Mars Science Laboratory Mission
+        </div>
+      </footer>
+    </div>
+
+    <!-- Enhanced Modal -->
+    <div id="photoModal" class="photo-modal">
+      <div class="modal-header">
+        <span class="modal-title">SURFACE IMAGE ANALYSIS</span>
         <span class="close-modal">&times;</span>
-        <img class="modal-content" id="modalImage" />
-        <div id="modalCaption"></div>
       </div>
+      <img class="modal-content" id="modalImage" />
+      <div id="modalCaption" class="modal-caption"></div>
     </div>
 
     <script>
@@ -187,10 +334,12 @@
       const darkModeToggle = document.getElementById("darkModeToggle");
 
       // Listen for changes in the toggle state
-      darkModeToggle.addEventListener("change", () => {
-        // Toggle the dark mode class on the body element
-        document.body.classList.toggle("dark-mode");
-      });
+      if (darkModeToggle) {
+        darkModeToggle.addEventListener("change", () => {
+          // Toggle the dark mode class on the body element
+          document.body.classList.toggle("dark-mode");
+        });
+      }
     </script>
   </body>
 </html>
