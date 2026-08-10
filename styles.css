@@ -1364,13 +1364,13 @@ body::before {
 .chart-grid,
 .radar-grid {
   fill: none;
-  stroke: rgba(145, 175, 190, 0.22);
+  stroke: rgba(176, 210, 224, 0.38);
   stroke-width: 1;
 }
 
 .chart-axis-label,
 .chart-legend text {
-  fill: var(--text-muted);
+  fill: var(--text-secondary);
   font-family: 'Share Tech Mono', monospace;
   font-size: 12px;
 }
@@ -1410,6 +1410,11 @@ body::before {
 .radar-shape.low { fill: rgba(0, 212, 255, 0.18); stroke: var(--accent-cyan); }
 
 .temperature-scroll[data-mode="radar"] { overflow: hidden; }
+
+.temperature-scroll[data-mode="line"] {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
 
 .temperature-scroll::-webkit-scrollbar {
   width: 6px;

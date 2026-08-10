@@ -291,6 +291,30 @@ export class WeatherManager {
     
     scrollContainer.dataset.mode = this.currentChartMode;
     scrollContainer.setAttribute('aria-label', `${this.currentChartMode} temperature chart`);
+
+    if (this.currentChartMode === 'line') {
+      const periodMin = Math.min(...lows);
+      const periodMax = Math.max(...highs);
+      const periodRange = Math.max(1, periodMax - periodMin);
+      const reversedData = [...data].reverse();
+
+      reversedData.forEach((day, index) => {
+        const dayElement = this.createTemperatureDay(
+          day,
+          reversedData.length - index - 1,
+          periodMin,
+          periodMax,
+          periodRange
+        );
+        scrollContainer.appendChild(dayElement);
+      });
+
+      requestAnimationFrame(() => {
+        scrollContainer.scrollTop = scrollContainer.scrollHeight;
+      });
+      return;
+    }
+
     scrollContainer.appendChild(this.createChart(data, this.currentChartMode));
   }
 
