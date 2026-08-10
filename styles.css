@@ -1401,19 +1401,21 @@ body::before {
 .legend-swatch.low,
 .chart-bar.low { fill: var(--accent-cyan); }
 .legend-swatch.average { fill: var(--accent-green); }
+.chart-bar { stroke: none; }
 .chart-point:hover,
 .chart-point:focus {
   filter: brightness(1.4) drop-shadow(0 0 5px currentColor);
   outline: none;
 }
 
-.chart-bar:hover {
-  filter: brightness(1.12);
-  stroke: rgba(255, 255, 255, 0.75);
-  stroke-width: 1;
-}
+.chart-bar.high:hover { filter: brightness(1.1) drop-shadow(0 0 2px var(--accent-orange)); }
+.chart-bar.low:hover { filter: brightness(1.1) drop-shadow(0 0 2px var(--accent-cyan)); }
 
-.chart-range-area { fill: rgba(0, 212, 255, 0.12); }
+.chart-range-area {
+  fill: rgba(0, 212, 255, 0.12);
+  pointer-events: none;
+}
+.chart-line.average { pointer-events: none; }
 .radar-shape { stroke-width: 3; }
 .radar-shape.high { fill: rgba(255, 122, 0, 0.18); stroke: var(--accent-orange); }
 .radar-shape.low { fill: rgba(0, 212, 255, 0.18); stroke: var(--accent-cyan); }
