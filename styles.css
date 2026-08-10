@@ -1402,8 +1402,16 @@ body::before {
 .chart-bar.low { fill: var(--accent-cyan); }
 .legend-swatch.average { fill: var(--accent-green); }
 .chart-point:hover,
-.chart-point:focus,
-.chart-bar:hover { filter: brightness(1.4) drop-shadow(0 0 5px currentColor); outline: none; }
+.chart-point:focus {
+  filter: brightness(1.4) drop-shadow(0 0 5px currentColor);
+  outline: none;
+}
+
+.chart-bar:hover {
+  filter: brightness(1.12);
+  stroke: rgba(255, 255, 255, 0.75);
+  stroke-width: 1;
+}
 
 .chart-range-area { fill: rgba(0, 212, 255, 0.12); }
 .radar-shape { stroke-width: 3; }
