@@ -1390,7 +1390,8 @@ body::before {
 .chart-point,
 .legend-swatch,
 .chart-bar,
-.radar-shape {
+.radar-shape,
+.radar-point {
   transition: opacity 0.2s ease, filter 0.2s ease;
 }
 
@@ -1399,7 +1400,9 @@ body::before {
 .chart-bar.high { fill: var(--accent-orange); }
 .chart-point.low,
 .legend-swatch.low,
-.chart-bar.low { fill: var(--accent-cyan); }
+.chart-bar.low,
+.radar-point.low { fill: var(--accent-cyan); }
+.radar-point.high { fill: var(--accent-orange); }
 .legend-swatch.average { fill: var(--accent-green); }
 .chart-bar { stroke: none; }
 .chart-point:hover,
@@ -1410,13 +1413,19 @@ body::before {
 
 .chart-bar.high:hover { filter: brightness(1.1) drop-shadow(0 0 2px var(--accent-orange)); }
 .chart-bar.low:hover { filter: brightness(1.1) drop-shadow(0 0 2px var(--accent-cyan)); }
+.radar-point.high:hover,
+.radar-point.high:focus { filter: brightness(1.15) drop-shadow(0 0 3px var(--accent-orange)); }
+.radar-point.low:hover,
+.radar-point.low:focus { filter: brightness(1.15) drop-shadow(0 0 3px var(--accent-cyan)); }
+.chart-bar:focus,
+.radar-point:focus { outline: none; }
 
 .chart-range-area {
   fill: rgba(0, 212, 255, 0.12);
   pointer-events: none;
 }
 .chart-line.average { pointer-events: none; }
-.radar-shape { stroke-width: 3; }
+.radar-shape { stroke-width: 3; pointer-events: none; }
 .radar-shape.high { fill: rgba(255, 122, 0, 0.18); stroke: var(--accent-orange); }
 .radar-shape.low { fill: rgba(0, 212, 255, 0.18); stroke: var(--accent-cyan); }
 
@@ -1426,6 +1435,31 @@ body::before {
   overflow-y: auto;
   overflow-x: hidden;
 }
+
+.chart-tooltip {
+  position: absolute;
+  z-index: 5;
+  max-width: calc(100% - 16px);
+  padding: 7px 10px 6px;
+  border: 1px solid rgba(176, 210, 224, 0.55);
+  border-radius: 4px;
+  background: rgba(5, 14, 20, 0.96);
+  color: var(--text-primary);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.42);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.6px;
+  line-height: 1;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.12s ease, transform 0.12s ease;
+  white-space: nowrap;
+}
+
+.chart-tooltip.visible { opacity: 1; transform: translateY(0); }
+.chart-tooltip[data-series="high"] { border-color: rgba(255, 107, 53, 0.72); }
+.chart-tooltip[data-series="low"] { border-color: rgba(0, 212, 255, 0.72); }
 
 .temperature-scroll::-webkit-scrollbar {
   width: 6px;

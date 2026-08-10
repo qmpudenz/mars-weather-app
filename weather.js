@@ -248,6 +248,7 @@ export class WeatherManager {
 
   renderTemperatureAnalysis(data) {
     const scrollContainer = document.getElementById('temperatureScroll');
+    scrollContainer.parentElement?.querySelector('.chart-tooltip')?.remove();
     scrollContainer.innerHTML = '';
     
     if (!data || data.length === 0) {
@@ -315,7 +316,9 @@ export class WeatherManager {
       return;
     }
 
-    scrollContainer.appendChild(this.createChart(data, this.currentChartMode));
+    const chart = this.createChart(data, this.currentChartMode);
+    scrollContainer.appendChild(chart);
+    this.setupChartTooltips(chart, scrollContainer);
   }
 
   createChart(data, mode) {
@@ -331,7 +334,13 @@ export class WeatherManager {
     const min = Math.floor((rawMin - 5) / 10) * 10;
     const max = Math.ceil((rawMax + 5) / 10) * 10;
     const range = Math.max(1, max - min);
-    const x = index => padding.left + (orderedData.length === 1 ? plotWidth / 2 : index * plotWidth / (orderedData.length - 1));
+    const edgeInset = ['bar', 'multi'].includes(mode)
+      ? Math.max(22, Math.min(42, plotWidth / (orderedData.length * 2)))
+      : 0;
+    const usableWidth = plotWidth - edgeInset * 2;
+    const x = index => padding.left + edgeInset + (orderedData.length === 1
+      ? usableWidth / 2
+      : index * usableWidth / (orderedData.length - 1));
     const y = value => padding.top + (max - value) / range * plotHeight;
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
@@ -350,12 +359,12 @@ export class WeatherManager {
       ? `<text class="chart-axis-label" x="${x(index)}" y="${height - 20}" text-anchor="middle">Sol ${day.sol}</text>`
       : '').join('');
 
-    const point = (day, index, type) => `<circle class="chart-point ${type}" cx="${x(index)}" cy="${y(day[type])}" r="4" tabindex="0"><title>Sol ${day.sol}: ${type} ${day[type]}°F</title></circle>`;
+    const point = (day, index, type) => `<circle class="chart-point ${type}" cx="${x(index)}" cy="${y(day[type])}" r="4" tabindex="0" data-series="${type}" data-tooltip="Sol ${day.sol} · ${type.toUpperCase()} ${day[type]}°F"/>`;
     const line = type => `<polyline class="chart-line ${type}" points="${orderedData.map((day, index) => `${x(index)},${y(day[type])}`).join(' ')}" />${orderedData.map((day, index) => point(day, index, type)).join('')}`;
     const barWidth = Math.max(5, Math.min(28, plotWidth / orderedData.length / 3));
     const bars = orderedData.map((day, index) => `<g class="chart-bar-group">
-      <rect class="chart-bar low" x="${x(index) - barWidth - 2}" y="${y(day.low)}" width="${barWidth}" height="${padding.top + plotHeight - y(day.low)}"><title>Sol ${day.sol}: low ${day.low}°F</title></rect>
-      <rect class="chart-bar high" x="${x(index) + 2}" y="${y(day.high)}" width="${barWidth}" height="${padding.top + plotHeight - y(day.high)}"><title>Sol ${day.sol}: high ${day.high}°F</title></rect>
+      <rect class="chart-bar low" x="${x(index) - barWidth - 2}" y="${y(day.low)}" width="${barWidth}" height="${padding.top + plotHeight - y(day.low)}" tabindex="0" data-series="low" data-tooltip="Sol ${day.sol} · LOW ${day.low}°F"/>
+      <rect class="chart-bar high" x="${x(index) + 2}" y="${y(day.high)}" width="${barWidth}" height="${padding.top + plotHeight - y(day.high)}" tabindex="0" data-series="high" data-tooltip="Sol ${day.sol} · HIGH ${day.high}°F"/>
     </g>`).join('');
 
     let marks = '';
@@ -384,6 +393,50 @@ export class WeatherManager {
     return svg;
   }
 
+  setupChartTooltips(svg, scrollContainer) {
+    const viewport = scrollContainer.parentElement;
+    if (!viewport) return;
+
+    const tooltip = document.createElement('div');
+    tooltip.className = 'chart-tooltip';
+    tooltip.setAttribute('role', 'status');
+    tooltip.setAttribute('aria-hidden', 'true');
+    viewport.appendChild(tooltip);
+
+    const hideTooltip = () => {
+      tooltip.classList.remove('visible');
+      tooltip.setAttribute('aria-hidden', 'true');
+    };
+
+    const showTooltip = (target, clientX, clientY) => {
+      const viewportRect = viewport.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      const anchorX = clientX ?? targetRect.left + targetRect.width / 2;
+      const anchorY = clientY ?? targetRect.top;
+
+      tooltip.textContent = target.dataset.tooltip;
+      tooltip.dataset.series = target.dataset.series;
+      tooltip.classList.add('visible');
+      tooltip.setAttribute('aria-hidden', 'false');
+
+      const left = Math.max(8, Math.min(
+        anchorX - viewportRect.left - tooltip.offsetWidth / 2,
+        viewportRect.width - tooltip.offsetWidth - 8
+      ));
+      const top = Math.max(8, anchorY - viewportRect.top - tooltip.offsetHeight - 12);
+      tooltip.style.left = `${left}px`;
+      tooltip.style.top = `${top}px`;
+    };
+
+    svg.querySelectorAll('[data-tooltip]').forEach(target => {
+      target.addEventListener('mouseenter', event => showTooltip(target, event.clientX, event.clientY));
+      target.addEventListener('mousemove', event => showTooltip(target, event.clientX, event.clientY));
+      target.addEventListener('mouseleave', hideTooltip);
+      target.addEventListener('focus', () => showTooltip(target));
+      target.addEventListener('blur', hideTooltip);
+    });
+  }
+
   createRadarMarks(data, width, height, min, range) {
     const radarData = data.slice(-Math.min(12, data.length));
     const centerX = width / 2;
@@ -401,7 +454,12 @@ export class WeatherManager {
       const [labelX, labelY] = position(index, radius + 20);
       return `<line class="chart-grid" x1="${centerX}" y1="${centerY}" x2="${axisX}" y2="${axisY}"/><text class="chart-axis-label" x="${labelX}" y="${labelY + 4}" text-anchor="middle">${day.sol}</text>`;
     }).join('');
-    return `${rings}${axes}<polygon class="radar-shape high" points="${polygon('high')}"/><polygon class="radar-shape low" points="${polygon('low')}"/>`;
+    const radarPoints = ['high', 'low'].map(type => radarData.map((day, index) => {
+      const normalized = (day[type] - min) / range;
+      const [pointX, pointY] = position(index, 25 + normalized * (radius - 25));
+      return `<circle class="radar-point ${type}" cx="${pointX}" cy="${pointY}" r="5" tabindex="0" data-series="${type}" data-tooltip="Sol ${day.sol} · ${type.toUpperCase()} ${day[type]}°F"/>`;
+    }).join('')).join('');
+    return `${rings}${axes}<polygon class="radar-shape high" points="${polygon('high')}"/><polygon class="radar-shape low" points="${polygon('low')}"/>${radarPoints}`;
   }
 
   createTemperatureDay(day, index, periodMin, periodMax, periodRange) {
