@@ -64,21 +64,53 @@ export class UIControls {
   initializeChartModeSelector() {
     const chartModeSelector = document.getElementById('chartModeSelector');
     if (!chartModeSelector) return;
+    const dial = chartModeSelector.querySelector('.rotary-dial');
+    const positions = [...chartModeSelector.querySelectorAll('.dial-position')];
+    const modes = positions.map(position => position.dataset.mode);
 
-    chartModeSelector.addEventListener('change', () => {
-      const selectedMode = chartModeSelector.value;
-      const chartContainer = document.querySelector('.temperature-analysis');
-      
-      if (chartContainer) {
-        // Remove all mode classes
-        chartContainer.classList.remove('mode-line', 'mode-bar', 'mode-scatter');
-        // Add selected mode class
-        chartContainer.classList.add(`mode-${selectedMode}`);
+    const selectMode = (mode) => {
+      const selectedIndex = modes.indexOf(mode);
+      if (selectedIndex < 0) return;
+
+      chartModeSelector.style.setProperty('--dial-rotation', `${selectedIndex * 90}deg`);
+      positions.forEach(position => {
+        const isActive = position.dataset.mode === mode;
+        position.classList.toggle('active', isActive);
+        position.setAttribute('aria-checked', String(isActive));
+      });
+
+      if (this.weatherManager) {
+        this.weatherManager.setChartMode(mode);
       }
-      
-      // Play sound effect
-      this.playClickSound();
+    };
+
+    positions.forEach(position => {
+      position.addEventListener('click', event => {
+        event.stopPropagation();
+        selectMode(position.dataset.mode);
+        this.playClickSound();
+      });
     });
+
+    const cycleMode = (direction = 1) => {
+      const currentMode = this.weatherManager?.currentChartMode || 'line';
+      const currentIndex = Math.max(0, modes.indexOf(currentMode));
+      selectMode(modes[(currentIndex + direction + modes.length) % modes.length]);
+      this.playClickSound();
+    };
+
+    dial.addEventListener('click', () => cycleMode());
+    dial.addEventListener('keydown', event => {
+      if (['ArrowRight', 'ArrowDown', 'Enter', ' '].includes(event.key)) {
+        event.preventDefault();
+        cycleMode();
+      } else if (['ArrowLeft', 'ArrowUp'].includes(event.key)) {
+        event.preventDefault();
+        cycleMode(-1);
+      }
+    });
+
+    selectMode(this.weatherManager?.currentChartMode || 'line');
   }
 
   initializePeriodSelector() {
@@ -263,4 +295,4 @@ export class UIControls {
       }
     }
   }
-} 
+}

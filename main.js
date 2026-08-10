@@ -1,7 +1,7 @@
 // Main Application Script
-import { WeatherManager } from './weather.js';
-import { PhotoManager } from './photos.js';
-import { UIControls } from './ui-controls.js';
+import { WeatherManager } from './weather.js?v=2';
+import { PhotoManager } from './photos.js?v=2';
+import { UIControls } from './ui-controls.js?v=2';
 
 class MarsWeatherApp {
   constructor() {
@@ -40,4 +40,4 @@ class MarsWeatherApp {
 document.addEventListener('DOMContentLoaded', () => {
   const app = new MarsWeatherApp();
   app.initialize();
-}); 
+});

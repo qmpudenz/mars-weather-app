@@ -3,6 +3,7 @@ export class WeatherManager {
   constructor() {
     this.temperatureData = [];
     this.currentChartPeriod = 7;
+    this.currentChartMode = 'line';
   }
 
   async getMarsWeather() {
@@ -238,6 +239,13 @@ export class WeatherManager {
     return data.slice(0, daysToShow);
   }
 
+  setChartMode(mode) {
+    if (!['line', 'bar', 'radar', 'multi'].includes(mode)) return;
+    this.currentChartMode = mode;
+    const chartData = this.getChartDataForPeriod(this.temperatureData, this.currentChartPeriod);
+    this.renderTemperatureAnalysis(chartData);
+  }
+
   renderTemperatureAnalysis(data) {
     const scrollContainer = document.getElementById('temperatureScroll');
     scrollContainer.innerHTML = '';
@@ -281,22 +289,95 @@ export class WeatherManager {
       trendElement.className = 'trend-value';
     }
     
-    // Calculate the temperature range for the selected period
-    const periodMin = Math.min(...lows);
-    const periodMax = Math.max(...highs);
-    const periodRange = periodMax - periodMin;
-    
-    // Render temperature days in reverse order (most recent at bottom)
-    const reversedData = [...data].reverse();
-    reversedData.forEach((day, index) => {
-      const dayElement = this.createTemperatureDay(day, reversedData.length - index - 1, periodMin, periodMax, periodRange);
-      scrollContainer.appendChild(dayElement);
-    });
-    
-    // Scroll to bottom (most recent) after a short delay
-    setTimeout(() => {
-      scrollContainer.scrollTop = scrollContainer.scrollHeight;
-    }, 100);
+    scrollContainer.dataset.mode = this.currentChartMode;
+    scrollContainer.setAttribute('aria-label', `${this.currentChartMode} temperature chart`);
+    scrollContainer.appendChild(this.createChart(data, this.currentChartMode));
+  }
+
+  createChart(data, mode) {
+    const orderedData = [...data].reverse();
+    const width = 900;
+    const height = 360;
+    const padding = { top: 30, right: 30, bottom: 55, left: 65 };
+    const plotWidth = width - padding.left - padding.right;
+    const plotHeight = height - padding.top - padding.bottom;
+    const values = orderedData.flatMap(day => [day.low, day.high]).filter(Number.isFinite);
+    const rawMin = Math.min(...values);
+    const rawMax = Math.max(...values);
+    const min = Math.floor((rawMin - 5) / 10) * 10;
+    const max = Math.ceil((rawMax + 5) / 10) * 10;
+    const range = Math.max(1, max - min);
+    const x = index => padding.left + (orderedData.length === 1 ? plotWidth / 2 : index * plotWidth / (orderedData.length - 1));
+    const y = value => padding.top + (max - value) / range * plotHeight;
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+    svg.setAttribute('class', `temperature-chart chart-${mode}`);
+    svg.setAttribute('role', 'img');
+
+    const gridLines = Array.from({ length: 5 }, (_, index) => {
+      const value = max - index * range / 4;
+      const lineY = padding.top + index * plotHeight / 4;
+      return `<line class="chart-grid" x1="${padding.left}" y1="${lineY}" x2="${width - padding.right}" y2="${lineY}" />
+        <text class="chart-axis-label" x="${padding.left - 12}" y="${lineY + 4}" text-anchor="end">${Math.round(value)}°</text>`;
+    }).join('');
+
+    const labelStep = Math.max(1, Math.ceil(orderedData.length / 8));
+    const xLabels = orderedData.map((day, index) => index % labelStep === 0 || index === orderedData.length - 1
+      ? `<text class="chart-axis-label" x="${x(index)}" y="${height - 20}" text-anchor="middle">Sol ${day.sol}</text>`
+      : '').join('');
+
+    const point = (day, index, type) => `<circle class="chart-point ${type}" cx="${x(index)}" cy="${y(day[type])}" r="4" tabindex="0"><title>Sol ${day.sol}: ${type} ${day[type]}°F</title></circle>`;
+    const line = type => `<polyline class="chart-line ${type}" points="${orderedData.map((day, index) => `${x(index)},${y(day[type])}`).join(' ')}" />${orderedData.map((day, index) => point(day, index, type)).join('')}`;
+    const barWidth = Math.max(5, Math.min(28, plotWidth / orderedData.length / 3));
+    const bars = orderedData.map((day, index) => `<g class="chart-bar-group">
+      <rect class="chart-bar low" x="${x(index) - barWidth - 2}" y="${y(day.low)}" width="${barWidth}" height="${padding.top + plotHeight - y(day.low)}"><title>Sol ${day.sol}: low ${day.low}°F</title></rect>
+      <rect class="chart-bar high" x="${x(index) + 2}" y="${y(day.high)}" width="${barWidth}" height="${padding.top + plotHeight - y(day.high)}"><title>Sol ${day.sol}: high ${day.high}°F</title></rect>
+    </g>`).join('');
+
+    let marks = '';
+    if (mode === 'line') {
+      marks = line('high') + line('low');
+    } else if (mode === 'bar') {
+      marks = bars;
+    } else if (mode === 'multi') {
+      const rangeArea = orderedData.map((day, index) => `${x(index)},${y(day.high)}`)
+        .concat([...orderedData].reverse().map((day, reverseIndex) => `${x(orderedData.length - reverseIndex - 1)},${y(day.low)}`)).join(' ');
+      const averageLine = `<polyline class="chart-line average" points="${orderedData.map((day, index) => `${x(index)},${y((day.high + day.low) / 2)}`).join(' ')}" />`;
+      marks = `<polygon class="chart-range-area" points="${rangeArea}" />${bars}${averageLine}`;
+    } else {
+      marks = this.createRadarMarks(orderedData, width, height, min, range);
+    }
+
+    const legend = `<g class="chart-legend" transform="translate(${width - 245} 15)">
+      <circle class="legend-swatch low" cx="0" cy="0" r="5"/><text x="10" y="4">LOW</text>
+      <circle class="legend-swatch high" cx="70" cy="0" r="5"/><text x="80" y="4">HIGH</text>
+      ${mode === 'multi' ? '<circle class="legend-swatch average" cx="155" cy="0" r="5"/><text x="165" y="4">AVG</text>' : ''}
+    </g>`;
+
+    svg.innerHTML = mode === 'radar'
+      ? `<title>Mars temperature radar chart</title>${marks}${legend}`
+      : `<title>Mars temperature ${mode} chart</title>${gridLines}${xLabels}${marks}${legend}`;
+    return svg;
+  }
+
+  createRadarMarks(data, width, height, min, range) {
+    const radarData = data.slice(-Math.min(12, data.length));
+    const centerX = width / 2;
+    const centerY = height / 2 + 5;
+    const radius = 125;
+    const angle = index => -Math.PI / 2 + index * Math.PI * 2 / radarData.length;
+    const position = (index, distance) => [centerX + Math.cos(angle(index)) * distance, centerY + Math.sin(angle(index)) * distance];
+    const polygon = (type) => radarData.map((day, index) => {
+      const normalized = (day[type] - min) / range;
+      return position(index, 25 + normalized * (radius - 25)).join(',');
+    }).join(' ');
+    const rings = [0.25, 0.5, 0.75, 1].map(scale => `<polygon class="radar-grid" points="${radarData.map((_, index) => position(index, radius * scale).join(',')).join(' ')}" />`).join('');
+    const axes = radarData.map((day, index) => {
+      const [axisX, axisY] = position(index, radius);
+      const [labelX, labelY] = position(index, radius + 20);
+      return `<line class="chart-grid" x1="${centerX}" y1="${centerY}" x2="${axisX}" y2="${axisY}"/><text class="chart-axis-label" x="${labelX}" y="${labelY + 4}" text-anchor="middle">${day.sol}</text>`;
+    }).join('');
+    return `${rings}${axes}<polygon class="radar-shape high" points="${polygon('high')}"/><polygon class="radar-shape low" points="${polygon('low')}"/>`;
   }
 
   createTemperatureDay(day, index, periodMin, periodMax, periodRange) {
@@ -340,4 +421,4 @@ export class WeatherManager {
     
     return dayDiv;
   }
-} 
+}

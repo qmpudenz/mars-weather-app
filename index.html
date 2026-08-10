@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    <script type="module" src="main.js"></script>
+    <script type="module" src="main.js?v=2"></script>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -169,14 +169,14 @@
           <div class="panel-header">
             <h2>TEMPERATURE ANALYSIS</h2>
             <div class="chart-controls">
-              <div class="rotary-selector" id="chartModeSelector">
-                <div class="rotary-dial">
+              <div class="rotary-selector" id="chartModeSelector" role="radiogroup" aria-label="Chart mode">
+                <div class="rotary-dial" tabindex="0" aria-label="Cycle chart mode">
                   <div class="dial-indicator"></div>
                   <div class="dial-positions">
-                    <div class="dial-position" data-mode="line">LINE</div>
-                    <div class="dial-position" data-mode="bar">BAR</div>
-                    <div class="dial-position" data-mode="radar">RADAR</div>
-                    <div class="dial-position" data-mode="multi">MULTI</div>
+                    <button class="dial-position active" type="button" role="radio" aria-checked="true" data-mode="line">LINE</button>
+                    <button class="dial-position" type="button" role="radio" aria-checked="false" data-mode="bar">BAR</button>
+                    <button class="dial-position" type="button" role="radio" aria-checked="false" data-mode="radar">RADAR</button>
+                    <button class="dial-position" type="button" role="radio" aria-checked="false" data-mode="multi">MULTI</button>
                   </div>
                 </div>
                 <span class="selector-label">CHART MODE</span>

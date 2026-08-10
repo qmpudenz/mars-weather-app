@@ -1014,6 +1014,7 @@ body::before {
 
 /* Chart Mode Rotary Selector */
 .rotary-selector {
+  --dial-rotation: 0deg;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1043,7 +1044,7 @@ body::before {
   width: 4px;
   height: 30px;
   background: var(--accent-cyan);
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) rotate(var(--dial-rotation));
   transform-origin: center 15px;
   transition: all 0.3s ease;
   box-shadow: 0 0 5px var(--accent-cyan);
@@ -1066,6 +1067,11 @@ body::before {
   letter-spacing: 0.5px;
   transform-origin: center 40px;
   transition: all 0.3s ease;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  font-family: inherit;
+  cursor: pointer;
 }
 
 .dial-position:nth-child(1) { transform: rotate(0deg) translateY(-35px); }
@@ -1347,6 +1353,63 @@ body::before {
   padding: 5px 0;
   overflow-x: hidden;
 }
+
+.temperature-chart {
+  width: 100%;
+  min-width: 620px;
+  height: 100%;
+  overflow: visible;
+}
+
+.chart-grid,
+.radar-grid {
+  fill: none;
+  stroke: rgba(145, 175, 190, 0.22);
+  stroke-width: 1;
+}
+
+.chart-axis-label,
+.chart-legend text {
+  fill: var(--text-muted);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+}
+
+.chart-line {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.chart-line.high { stroke: var(--accent-orange); }
+.chart-line.low { stroke: var(--accent-cyan); }
+.chart-line.average { stroke: var(--accent-green); stroke-dasharray: 8 6; }
+
+.chart-point,
+.legend-swatch,
+.chart-bar,
+.radar-shape {
+  transition: opacity 0.2s ease, filter 0.2s ease;
+}
+
+.chart-point.high,
+.legend-swatch.high,
+.chart-bar.high { fill: var(--accent-orange); }
+.chart-point.low,
+.legend-swatch.low,
+.chart-bar.low { fill: var(--accent-cyan); }
+.legend-swatch.average { fill: var(--accent-green); }
+.chart-point:hover,
+.chart-point:focus,
+.chart-bar:hover { filter: brightness(1.4) drop-shadow(0 0 5px currentColor); outline: none; }
+
+.chart-range-area { fill: rgba(0, 212, 255, 0.12); }
+.radar-shape { stroke-width: 3; }
+.radar-shape.high { fill: rgba(255, 122, 0, 0.18); stroke: var(--accent-orange); }
+.radar-shape.low { fill: rgba(0, 212, 255, 0.18); stroke: var(--accent-cyan); }
+
+.temperature-scroll[data-mode="radar"] { overflow: hidden; }
 
 .temperature-scroll::-webkit-scrollbar {
   width: 6px;
