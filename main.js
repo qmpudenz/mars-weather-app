@@ -1,7 +1,7 @@
 // Main Application Script
-import { WeatherManager } from './weather.js?v=3';
-import { PhotoManager } from './photos.js?v=3';
-import { UIControls } from './ui-controls.js?v=3';
+import { WeatherManager } from './weather.js?v=5';
+import { PhotoManager } from './photos.js?v=5';
+import { UIControls } from './ui-controls.js?v=5';
 
 class MarsWeatherApp {
   constructor() {

@@ -1012,83 +1012,96 @@ body::before {
   text-align: center;
 }
 
-/* Chart Mode Rotary Selector */
-.rotary-selector {
-  --dial-rotation: 0deg;
+/* Spacecraft Display Mode Console */
+.flight-mode-selector {
+  min-width: 430px;
+  padding: 8px;
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(17, 31, 40, 0.98), rgba(5, 12, 17, 0.98));
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.06), 0 8px 18px rgba(0, 0, 0, 0.25);
+}
+
+.flight-mode-status {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 7px;
+  padding: 0 4px 7px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 1.2px;
 }
 
-.rotary-dial {
+.flight-status-light {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-green);
+  box-shadow: 0 0 8px var(--accent-green);
+}
+
+.flight-status-label { color: var(--text-muted); }
+.flight-status-value { margin-left: auto; color: var(--accent-cyan); }
+
+.flight-mode-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.flight-mode-button {
   position: relative;
-  width: 80px;
-  height: 80px;
-  border: 3px solid var(--border-primary);
-  border-radius: 50%;
-  background: var(--bg-secondary);
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.rotary-dial:hover {
-  border-color: var(--accent-cyan);
-  box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
-}
-
-.dial-indicator {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 4px;
-  height: 30px;
-  background: var(--accent-cyan);
-  transform: translate(-50%, -50%) rotate(var(--dial-rotation));
-  transform-origin: center 15px;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 5px var(--accent-cyan);
-}
-
-.dial-positions {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 50%;
-}
-
-.dial-position {
-  position: absolute;
-  font-size: 0.6rem;
-  color: var(--text-muted);
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  transform-origin: center 40px;
-  transition: all 0.3s ease;
-  border: 0;
-  padding: 0;
-  background: transparent;
-  font-family: inherit;
-  cursor: pointer;
-}
-
-.dial-position:nth-child(1) { transform: rotate(0deg) translateY(-35px); }
-.dial-position:nth-child(2) { transform: rotate(90deg) translateY(-35px); }
-.dial-position:nth-child(3) { transform: rotate(180deg) translateY(-35px); }
-.dial-position:nth-child(4) { transform: rotate(270deg) translateY(-35px); }
-
-.dial-position.active {
-  color: var(--accent-cyan);
-  text-shadow: 0 0 5px var(--accent-cyan);
-}
-
-.selector-label {
-  font-size: 0.7rem;
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 7px 8px;
+  border: 1px solid rgba(131, 161, 175, 0.35);
+  border-radius: 5px;
+  background: linear-gradient(180deg, rgba(39, 55, 64, 0.85), rgba(17, 28, 35, 0.9));
   color: var(--text-secondary);
-  letter-spacing: 1px;
-  text-align: center;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.67rem;
+  letter-spacing: 0.7px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.flight-mode-button svg {
+  width: 21px;
+  height: 21px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.flight-mode-button small {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  color: var(--text-muted);
+  font-size: 0.48rem;
+}
+
+.flight-mode-button:hover {
+  color: var(--text-primary);
+  border-color: rgba(0, 212, 255, 0.65);
+  transform: translateY(-1px);
+}
+
+.flight-mode-button:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
+}
+
+.flight-mode-button.active {
+  color: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+  background: linear-gradient(180deg, rgba(0, 212, 255, 0.18), rgba(0, 87, 108, 0.18));
+  box-shadow: inset 0 0 14px rgba(0, 212, 255, 0.1), 0 0 10px rgba(0, 212, 255, 0.22);
 }
 
 /* Responsive Design */
@@ -1148,20 +1161,8 @@ body::before {
     gap: 8px;
   }
 
-  .rotary-dial {
-    width: 60px;
-    height: 60px;
-  }
-
-  .dial-position {
-    font-size: 0.5rem;
-    transform-origin: center 30px;
-  }
-
-  .dial-position:nth-child(1) { transform: rotate(0deg) translateY(-25px); }
-  .dial-position:nth-child(2) { transform: rotate(90deg) translateY(-25px); }
-  .dial-position:nth-child(3) { transform: rotate(180deg) translateY(-25px); }
-  .dial-position:nth-child(4) { transform: rotate(270deg) translateY(-25px); }
+  .flight-mode-selector { min-width: 0; width: 100%; }
+  .flight-mode-buttons { grid-template-columns: repeat(2, 1fr); }
 
   .logo-text {
     font-size: 2rem;

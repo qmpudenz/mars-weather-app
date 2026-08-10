@@ -12,8 +12,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    <script type="module" src="main.js?v=3"></script>
-    <link rel="stylesheet" href="styles.css?v=4" />
+    <script type="module" src="main.js?v=5"></script>
+    <link rel="stylesheet" href="styles.css?v=5" />
   </head>
   <body>
     <div class="mission-control">
@@ -169,17 +169,30 @@
           <div class="panel-header">
             <h2>TEMPERATURE ANALYSIS</h2>
             <div class="chart-controls">
-              <div class="rotary-selector" id="chartModeSelector" role="radiogroup" aria-label="Chart mode">
-                <div class="rotary-dial" tabindex="0" aria-label="Cycle chart mode">
-                  <div class="dial-indicator"></div>
-                  <div class="dial-positions">
-                    <button class="dial-position active" type="button" role="radio" aria-checked="true" data-mode="line">LINE</button>
-                    <button class="dial-position" type="button" role="radio" aria-checked="false" data-mode="bar">BAR</button>
-                    <button class="dial-position" type="button" role="radio" aria-checked="false" data-mode="radar">RADAR</button>
-                    <button class="dial-position" type="button" role="radio" aria-checked="false" data-mode="multi">MULTI</button>
-                  </div>
+              <div class="flight-mode-selector" id="chartModeSelector" role="radiogroup" aria-label="Temperature display mode">
+                <div class="flight-mode-status">
+                  <span class="flight-status-light" aria-hidden="true"></span>
+                  <span class="flight-status-label">DISPLAY MODE</span>
+                  <span class="flight-status-value" id="chartModeReadout">FORECAST</span>
                 </div>
-                <span class="selector-label">CHART MODE</span>
+                <div class="flight-mode-buttons">
+                  <button class="flight-mode-button active" type="button" role="radio" aria-checked="true" data-mode="line" data-label="FORECAST">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17c3-5 5 0 8-6s5 0 10-6M3 21h18"/></svg>
+                    <span>FORECAST</span><small>01</small>
+                  </button>
+                  <button class="flight-mode-button" type="button" role="radio" aria-checked="false" data-mode="bar" data-label="THRUST BARS">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19V9h3v10H5Zm6 0V4h3v15h-3Zm6 0v-7h3v7h-3Z"/></svg>
+                    <span>THRUST</span><small>02</small>
+                  </button>
+                  <button class="flight-mode-button" type="button" role="radio" aria-checked="false" data-mode="radar" data-label="RADAR SCAN">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="m12 12 6-6M12 2v2M22 12h-2M12 22v-2M2 12h2"/></svg>
+                    <span>RADAR</span><small>03</small>
+                  </button>
+                  <button class="flight-mode-button" type="button" role="radio" aria-checked="false" data-mode="multi" data-label="TELEMETRY">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 16h3l2-7 4 10 3-12 2 9h4"/></svg>
+                    <span>TELEMETRY</span><small>04</small>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
