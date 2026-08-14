@@ -4,6 +4,7 @@ const WEATHER_URL = 'https://mars.nasa.gov/rss/api/?feed=weather&category=msl&fe
 const PHOTO_URL = 'https://mars.nasa.gov/api/v1/raw_image_items/';
 const PHOTO_PAGE_SIZE = 500;
 const isNavcamPhoto = photo => photo.instrument?.startsWith('NAV_');
+const isLowResolutionPhoto = photo => photo.is_thumbnail || ['thumbnail', 'downsampled'].includes(photo.extended?.sample_type);
 const CAMERA_NAMES = {
   FHAZ_LEFT_A: 'Front Hazcam Left', FHAZ_LEFT_B: 'Front Hazcam Left',
   FHAZ_RIGHT_A: 'Front Hazcam Right', FHAZ_RIGHT_B: 'Front Hazcam Right',
@@ -177,7 +178,7 @@ function ChartTooltip({ text, series, x, y }) { return <div className="chart-too
 
 function PhotoGallery() {
   const [photos, setPhotos] = useState([]), [status, setStatus] = useState('loading'), [error, setError] = useState(null), [page, setPage] = useState(0), [more, setMore] = useState(true);
-  const [camera, setCamera] = useState('ALL'), [includeNavcam, setIncludeNavcam] = useState(false), [index, setIndex] = useState(0), [resolvedImageId, setResolvedImageId] = useState(null), [modal, setModal] = useState(false);
+  const [camera, setCamera] = useState('ALL'), [includeNavcam, setIncludeNavcam] = useState(false), [includeLowResolution, setIncludeLowResolution] = useState(false), [index, setIndex] = useState(0), [resolvedImageId, setResolvedImageId] = useState(null), [modal, setModal] = useState(false);
   const requestRef = useRef(null);
 
   const loadPage = useCallback(async (targetPage, replace = false) => {
@@ -197,13 +198,14 @@ function PhotoGallery() {
   }, []);
 
   useEffect(() => { loadPage(0, true); return () => requestRef.current?.abort(); }, [loadPage]);
-  const visiblePhotos = useMemo(() => includeNavcam ? photos : photos.filter(photo => !isNavcamPhoto(photo)), [photos, includeNavcam]);
+  const visiblePhotos = useMemo(() => photos.filter(photo => (includeNavcam || !isNavcamPhoto(photo)) && (includeLowResolution || !isLowResolutionPhoto(photo))), [photos, includeNavcam, includeLowResolution]);
   const navcamCount = useMemo(() => photos.filter(isNavcamPhoto).length, [photos]);
+  const lowResolutionCount = useMemo(() => photos.filter(isLowResolutionPhoto).length, [photos]);
   const cameras = useMemo(() => [...new Set(visiblePhotos.map(photo => photo.instrument))], [visiblePhotos]);
   const filtered = useMemo(() => camera === 'ALL' ? visiblePhotos : visiblePhotos.filter(photo => photo.instrument === camera), [visiblePhotos, camera]);
   const current = filtered[index] || filtered[0];
   const imageLoading = Boolean(current && resolvedImageId !== current.id);
-  useEffect(() => { setIndex(0); }, [camera, includeNavcam]);
+  useEffect(() => { setIndex(0); }, [camera, includeNavcam, includeLowResolution]);
   const move = direction => setIndex(value => (value + direction + filtered.length) % filtered.length);
   const select = value => setIndex(value);
   const minSol = photos.length ? Math.min(...photos.map(photo => photo.sol)) : null, maxSol = photos.length ? Math.max(...photos.map(photo => photo.sol)) : null;
@@ -215,7 +217,7 @@ function PhotoGallery() {
       {current && <><div className="image-navigation"><button className="nav-btn prev-btn" onClick={() => move(-1)} aria-label="Previous photo">‹</button><button className="nav-btn next-btn" onClick={() => move(1)} aria-label="Next photo">›</button></div><div className="photo-display"><img key={current.id} src={current.https_url || current.url} alt={current.description || current.title} className="rover-photo" onLoad={() => setResolvedImageId(current.id)} onError={() => setResolvedImageId(current.id)} onClick={() => setModal(true)}/></div><div className="image-camera-info"><span className="camera-label">{CAMERA_NAMES[current.instrument] || current.instrument} | Sol {current.sol}</span></div></>}
       {(status === 'loading' || imageLoading) && <div className="image-loading"><div className="loading-spinner"/><span className="loading-text">{status === 'loading' ? 'ACQUIRING LATEST IMAGE PACKET' : 'DECODING IMAGE'}</span></div>}
       {status === 'error' && !current && <div className="image-error"><strong>PHOTO LINK UNAVAILABLE</strong><span>{error?.message}</span><button className="continue-search-btn" onClick={() => loadPage(0, true)}>RETRY</button></div>}
-    </div><div className="camera-filter-panel"><div className="filter-header"><span className="filter-label">CAMERA FILTER</span><span className="active-filter">{camera === 'ALL' ? 'ALL CAMERAS' : CAMERA_NAMES[camera] || camera}</span></div><button className={`navcam-toggle ${includeNavcam ? 'active' : ''}`} type="button" aria-pressed={includeNavcam} onClick={() => { setIncludeNavcam(value => !value); setCamera('ALL'); }}><span className="navcam-toggle-copy"><strong>INCLUDE NAVCAM</strong><small>{navcamCount} lower-resolution images</small></span><span className="navcam-switch" aria-hidden="true"><span/></span></button><div className="camera-buttons"><CameraButton active={camera === 'ALL'} onClick={() => setCamera('ALL')}>ALL ({visiblePhotos.length})</CameraButton>{cameras.map(value => <CameraButton key={value} active={camera === value} onClick={() => setCamera(value)}>{CAMERA_NAMES[value] || value} ({visiblePhotos.filter(photo => photo.instrument === value).length})</CameraButton>)}</div></div></div></div>
+    </div><div className="camera-filter-panel"><div className="filter-header"><span className="filter-label">CAMERA FILTER</span><span className="active-filter">{camera === 'ALL' ? 'ALL CAMERAS' : CAMERA_NAMES[camera] || camera}</span></div><button className={`photo-filter-toggle ${includeNavcam ? 'active' : ''}`} type="button" aria-pressed={includeNavcam} onClick={() => { setIncludeNavcam(value => !value); setCamera('ALL'); }}><span className="photo-filter-toggle-copy"><strong>INCLUDE NAVCAM</strong><small>{navcamCount} navigation images</small></span><span className="photo-filter-switch" aria-hidden="true"><span/></span></button><button className={`photo-filter-toggle ${includeLowResolution ? 'active' : ''}`} type="button" aria-pressed={includeLowResolution} onClick={() => { setIncludeLowResolution(value => !value); setCamera('ALL'); }}><span className="photo-filter-toggle-copy"><strong>INCLUDE LOW RES</strong><small>{lowResolutionCount} thumbnail or downsampled images</small></span><span className="photo-filter-switch" aria-hidden="true"><span/></span></button><div className="camera-buttons"><CameraButton active={camera === 'ALL'} onClick={() => setCamera('ALL')}>ALL ({visiblePhotos.length})</CameraButton>{cameras.map(value => <CameraButton key={value} active={camera === value} onClick={() => setCamera(value)}>{CAMERA_NAMES[value] || value} ({visiblePhotos.filter(photo => photo.instrument === value).length})</CameraButton>)}</div></div></div></div>
     <div className="thumbnail-gallery">{filtered.map((photo, photoIndex) => <button key={photo.id} className={`thumbnail-item ${photoIndex === index ? 'active' : ''}`} onClick={() => select(photoIndex)} aria-label={`View ${photo.title}`}><img src={photo.https_url || photo.url} alt="" loading="lazy"/></button>)}</div>
     {modal && current && <div className="photo-modal react-modal" role="dialog" aria-modal="true" aria-label="Surface image analysis" onClick={() => setModal(false)}><div className="modal-header"><span className="modal-title">SURFACE IMAGE ANALYSIS</span><button className="close-modal" onClick={() => setModal(false)} aria-label="Close">×</button></div><img className="modal-content" src={current.https_url || current.url} alt={current.description}/><div className="modal-caption">{current.title} · NASA/JPL-Caltech</div></div>}
   </section>;

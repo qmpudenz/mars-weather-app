@@ -2024,7 +2024,7 @@ body::before {
   padding-right: 10px;
 }
 
-.navcam-toggle {
+.photo-filter-toggle {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -2041,28 +2041,28 @@ body::before {
   transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
 
-.navcam-toggle:hover {
+.photo-filter-toggle:hover {
   border-color: var(--accent-cyan);
   color: var(--accent-cyan);
 }
 
-.navcam-toggle-copy {
+.photo-filter-toggle-copy {
   display: flex;
   flex-direction: column;
   gap: 3px;
 }
 
-.navcam-toggle-copy strong {
+.photo-filter-toggle-copy strong {
   font-size: 0.78rem;
   letter-spacing: 1px;
 }
 
-.navcam-toggle-copy small {
+.photo-filter-toggle-copy small {
   color: var(--text-muted);
   font-size: 0.68rem;
 }
 
-.navcam-switch {
+.photo-filter-switch {
   position: relative;
   flex: 0 0 34px;
   width: 34px;
@@ -2073,7 +2073,7 @@ body::before {
   transition: border-color 0.2s ease, background 0.2s ease;
 }
 
-.navcam-switch span {
+.photo-filter-switch span {
   position: absolute;
   top: 3px;
   left: 3px;
@@ -2084,18 +2084,18 @@ body::before {
   transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 
-.navcam-toggle.active {
+.photo-filter-toggle.active {
   border-color: var(--accent-orange);
   color: var(--accent-orange);
   background: rgba(255, 165, 0, 0.08);
 }
 
-.navcam-toggle.active .navcam-switch {
+.photo-filter-toggle.active .photo-filter-switch {
   border-color: var(--accent-orange);
   background: rgba(255, 165, 0, 0.14);
 }
 
-.navcam-toggle.active .navcam-switch span {
+.photo-filter-toggle.active .photo-filter-switch span {
   transform: translateX(16px);
   background: var(--accent-orange);
   box-shadow: 0 0 7px rgba(255, 165, 0, 0.65);
