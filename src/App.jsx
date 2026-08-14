@@ -20,6 +20,18 @@ const formatDate = value => new Date(`${value}T12:00:00`).toLocaleDateString('en
   month: 'long', day: 'numeric', year: 'numeric',
 });
 
+function formatDataTimestamp(observation) {
+  if (!observation) return null;
+  const value = observation.updated_at || observation.date_received || observation.terrestrial_date;
+  if (!value) return null;
+  const includesTime = value.includes('T');
+  const date = new Date(includesTime ? value : `${value}T12:00:00Z`);
+  const formatted = date.toLocaleString('en-US', includesTime
+    ? { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', timeZoneName: 'short' }
+    : { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+  return includesTime ? formatted : `${formatted} · SOL ${observation.sol}`;
+}
+
 function useMarsWeather() {
   const [state, setState] = useState({ status: 'loading', soles: [], error: null });
 
@@ -228,6 +240,6 @@ function CameraButton({ active, onClick, children }) { return <button className=
 export default function App() {
   const weather = useMarsWeather();
   const latest = weather.soles[0];
-  const updatedAt = latest ? new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : null;
+  const updatedAt = formatDataTimestamp(latest);
   return <div className="mission-control"><Header updatedAt={updatedAt} online={weather.status === 'success'}/><main className="control-panel"><CurrentConditions latest={latest} status={weather.status} onRetry={weather.retry}/><TemperatureAnalysis soles={weather.soles}/><PhotoGallery/></main><footer className="system-footer"><div className="system-info"><span>CURIOSITY ROVER</span><span>|</span><span>GALE CRATER</span><span>|</span><span>NASA JPL</span></div><div className="data-source">Weather and raw imagery from NASA Mars Science Laboratory</div></footer></div>;
 }
