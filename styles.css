@@ -342,8 +342,8 @@ body::before {
 }
 
 .temp-reading-display.high-temp .temp-value-display {
-  color: var(--nasa-red);
-  text-shadow: 0 0 14px rgba(252, 61, 33, 0.32);
+  color: var(--accent-orange);
+  text-shadow: 0 0 14px rgba(255, 107, 53, 0.32);
 }
 
 .temp-reading-display.low-temp .temp-value-display {
