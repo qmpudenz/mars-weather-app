@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 const WEATHER_URL = 'https://mars.nasa.gov/rss/api/?feed=weather&category=msl&feedtype=json';
 const PHOTO_URL = 'https://mars.nasa.gov/api/v1/raw_image_items/';
+const PHOTO_PAGE_SIZE = 500;
 const CAMERA_NAMES = {
   FHAZ_LEFT_A: 'Front Hazcam Left', FHAZ_LEFT_B: 'Front Hazcam Left',
   FHAZ_RIGHT_A: 'Front Hazcam Right', FHAZ_RIGHT_B: 'Front Hazcam Right',
@@ -172,7 +173,7 @@ function PhotoGallery() {
     const controller = new AbortController(); requestRef.current = controller;
     setStatus(targetPage === 0 ? 'loading' : 'loading-more'); setError(null);
     try {
-      const query = new URLSearchParams({ mission: 'msl', per_page: '60', page: String(targetPage), order: 'sol desc,instrument_sort asc,date_taken desc' });
+      const query = new URLSearchParams({ mission: 'msl', per_page: String(PHOTO_PAGE_SIZE), page: String(targetPage), order: 'sol desc,instrument_sort asc,date_taken desc' });
       const response = await fetch(`${PHOTO_URL}?${query}`, { signal: controller.signal });
       if (!response.ok) throw new Error(`Image request failed (${response.status})`);
       const payload = await response.json();
@@ -195,7 +196,7 @@ function PhotoGallery() {
 
   return <section className="data-panel image-panel">
     <div className="panel-header"><h2>SURFACE IMAGERY</h2><div className="search-range-display"><span className="range-label">SEARCH RANGE:</span><span className="range-value">{minSol ? `SOL ${minSol} TO ${maxSol}` : 'ACQUIRING...'}</span></div><div className="image-controls"><span className="rover-info">CURIOSITY ROVER</span><div className="image-counter"><span className="counter-text">IMAGE {filtered.length ? index + 1 : '--'} OF {filtered.length || '--'}</span></div></div></div>
-    <div className="sol-search-indicator"><div className="search-info"><span className="search-label">PHOTO LINK</span><span className="search-value">{status === 'loading' ? 'CONNECTING TO NASA...' : status === 'loading-more' ? 'RECEIVING NEXT IMAGE PACKET...' : status === 'error' ? 'LINK INTERRUPTED' : `${photos.length} CURRENT RAW IMAGES RECEIVED`}</span></div>{status === 'error' && <button className="continue-search-btn" onClick={() => loadPage(page, page === 0)}>RETRY LINK</button>}{status === 'success' && more && <button className="continue-search-btn" onClick={() => loadPage(page + 1)}>LOAD 60 MORE</button>}</div>
+    <div className="sol-search-indicator"><div className="search-info"><span className="search-label">PHOTO LINK</span><span className="search-value">{status === 'loading' ? 'CONNECTING TO NASA...' : status === 'loading-more' ? 'RECEIVING NEXT IMAGE PACKET...' : status === 'error' ? 'LINK INTERRUPTED' : `${photos.length} CURRENT RAW IMAGES RECEIVED`}</span></div>{status === 'error' && <button className="continue-search-btn" onClick={() => loadPage(page, page === 0)}>RETRY LINK</button>}{status === 'success' && more && <button className="continue-search-btn" onClick={() => loadPage(page + 1)}>LOAD {PHOTO_PAGE_SIZE} MORE</button>}</div>
     <div className="image-viewer"><div className="image-content"><div className="main-image-container">
       {current && <><div className="image-navigation"><button className="nav-btn prev-btn" onClick={() => move(-1)} aria-label="Previous photo">‹</button><button className="nav-btn next-btn" onClick={() => move(1)} aria-label="Next photo">›</button></div><div className="photo-display"><img src={current.https_url || current.url} alt={current.description || current.title} className="rover-photo" onLoad={() => setImageLoading(false)} onError={() => setImageLoading(false)} onClick={() => setModal(true)}/></div><div className="image-camera-info"><span className="camera-label">{CAMERA_NAMES[current.instrument] || current.instrument} | Sol {current.sol}</span></div></>}
       {(status === 'loading' || imageLoading) && <div className="image-loading"><div className="loading-spinner"/><span className="loading-text">{status === 'loading' ? 'ACQUIRING LATEST IMAGE PACKET' : 'DECODING IMAGE'}</span></div>}
