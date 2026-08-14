@@ -139,6 +139,10 @@ function SvgChart({ data, mode }) {
 
   if (mode === 'radial') return <RadialChart data={ordered} tooltip={tip} setTooltip={setTip}/>;
   return <div className="react-chart-wrap"><svg className={`temperature-chart chart-${mode}`} viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`${mode} temperature chart`}>
+    <defs>
+      <linearGradient id="low-bar-gradient" x1="0" y1="1" x2="0" y2="0"><stop offset="0%" stopColor="#06385f"/><stop offset="55%" stopColor="#008bbf"/><stop offset="100%" stopColor="var(--accent-cyan)"/></linearGradient>
+      <linearGradient id="high-bar-gradient" x1="0" y1="1" x2="0" y2="0"><stop offset="0%" stopColor="#661c19"/><stop offset="55%" stopColor="var(--nasa-red)"/><stop offset="100%" stopColor="var(--accent-orange)"/></linearGradient>
+    </defs>
     {[0, 1, 2, 3, 4].map(index => { const lineY = top + index * plotHeight / 4; return <g key={index}><line className="chart-grid" x1={left} y1={lineY} x2={width - right} y2={lineY}/><text className="chart-axis-label" x={left - 12} y={lineY + 4} textAnchor="end">{Math.round(max - index * range / 4)}°</text></g>; })}
     {ordered.map((day, index) => <text key={day.sol} className="chart-axis-label" x={x(index)} y={height - 20} textAnchor="middle">Sol {day.sol}</text>)}
     {mode === 'combined' && <polygon className="chart-range-area" points={`${linePoints('high')} ${[...ordered].reverse().map((day, reverseIndex) => `${x(ordered.length - reverseIndex - 1)},${y(day.low)}`).join(' ')}`}/>} 

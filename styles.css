@@ -1406,12 +1406,12 @@ body::before {
 }
 
 .chart-point.high,
-.legend-swatch.high,
-.chart-bar.high { fill: var(--accent-orange); }
+.legend-swatch.high { fill: var(--accent-orange); }
 .chart-point.low,
 .legend-swatch.low,
-.chart-bar.low,
 .radar-point.low { fill: var(--accent-cyan); }
+.chart-bar.high { fill: url(#high-bar-gradient); }
+.chart-bar.low { fill: url(#low-bar-gradient); }
 .radar-point.high { fill: var(--accent-orange); }
 .legend-swatch.average { fill: var(--accent-green); }
 .chart-bar { stroke: none; }
