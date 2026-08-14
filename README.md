@@ -1,3 +1,20 @@
-# mars-weather-app
+# Mars Weather Station
 
-This project is a Mars Weather App designed to provide users with basic weather information for the red planet. Using Node.js, the app scrapes data from the NASA website to display the high and low temperatures, pressure, sunrise and sunset times, and a five-day weather forecast. While the app is not intended for scientific use, it provides a user-friendly interface for those who are interested in tracking Mars weather. This project serves as an example of my development skills and ability to work with web scraping technologies.
+A React mission-control dashboard for recent Curiosity weather observations and raw surface imagery from NASA.
+
+## Local development
+
+```bash
+npm install
+npm run dev
+```
+
+The Vite development server runs at `http://127.0.0.1:8000` by default.
+
+## Production build
+
+```bash
+npm run build
+```
+
+The application uses NASA's public Mars weather feed and Curiosity raw-image API directly. No API key is required.

@@ -2043,6 +2043,87 @@ body::before {
   background: rgba(0, 212, 255, 0.1);
 }
 
+/* React application states */
+.chart-empty,
+.image-error {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--text-muted);
+  font-family: 'Share Tech Mono', monospace;
+  letter-spacing: 1px;
+}
+
+.react-chart-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.react-tooltip {
+  position: fixed;
+  left: 0;
+  top: 0;
+  transform: translate(-50%, calc(-100% - 12px));
+}
+
+.react-tooltip.visible {
+  transform: translate(-50%, calc(-100% - 12px));
+}
+
+.thumbnail-item {
+  padding: 0;
+  background: transparent;
+}
+
+.image-error strong { color: var(--accent-orange); }
+
+.react-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  transform: none;
+  background: rgba(0, 0, 0, 0.92);
+}
+
+.react-modal .modal-header {
+  width: min(92vw, 1100px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.react-modal .modal-content {
+  display: block;
+  max-width: 92vw;
+  max-height: 78vh;
+  object-fit: contain;
+}
+
+.react-modal .close-modal {
+  border: 0;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .image-content { flex-direction: column; }
+  .image-viewer { height: auto; min-height: 620px; }
+  .main-image-container { min-height: 380px; }
+  .camera-filter-panel { max-height: 220px; }
+}
+
 .camera-btn.active {
   border-color: var(--accent-orange);
   color: var(--accent-orange);
