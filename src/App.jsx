@@ -112,13 +112,13 @@ function Summary({ label, value }) { return <div className="summary-item"><span 
 
 function HistoryChart({ data }) {
   const ordered = [...data].reverse();
-  const min = Math.min(...data.map(item => item.low));
-  const max = Math.max(...data.map(item => item.high));
-  const range = Math.max(1, max - min);
+  const periodLow = Math.min(...data.map(item => item.low));
+  const periodHigh = Math.max(...data.map(item => item.high));
+  const periodRange = Math.max(1, periodHigh - periodLow);
   return ordered.map((day, index) => {
-    const left = (day.low - min) / range * 100;
-    const width = (day.high - day.low) / range * 100;
-    return <div className="temp-day" key={day.sol}><div className="day-info"><div className="day-label">Sol {day.sol}</div><div className="day-date">{index === ordered.length - 1 ? 'TODAY' : `DAY ${ordered.length - index}`}</div></div><div className="temp-readings"><div className="temp-reading"><div className="temp-type">LOW</div><div className="temp-value low">{day.low}°F</div></div><div className="temp-bar"><div className="temp-bar-fill" style={{ width: `${width}%`, marginLeft: `${left}%` }}/></div><div className="temp-reading"><div className="temp-type">HIGH</div><div className="temp-value high">{day.high}°F</div></div></div></div>;
+    const left = (day.low - periodLow) / periodRange * 100;
+    const width = (day.high - day.low) / periodRange * 100;
+    return <div className="temp-day" key={day.sol}><div className="day-info"><div className="day-label">Sol {day.sol}</div><div className="day-date">{index === ordered.length - 1 ? 'TODAY' : `DAY ${ordered.length - index}`}</div></div><div className="temp-readings"><div className="temp-reading"><div className="temp-type">LOW</div><div className="temp-value low">{day.low}°F</div></div><div className="temp-bar" aria-label={`Period scale ${periodLow} to ${periodHigh} degrees Fahrenheit; Sol ${day.sol} spans ${day.low} to ${day.high} degrees`}><div className="temp-bar-fill" style={{ left: `${left}%`, width: `${width}%` }}/></div><div className="temp-reading"><div className="temp-type">HIGH</div><div className="temp-value high">{day.high}°F</div></div></div></div>;
   });
 }
 
