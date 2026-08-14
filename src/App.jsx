@@ -166,7 +166,7 @@ function ChartTooltip({ text, series, x, y }) { return <div className="chart-too
 
 function PhotoGallery() {
   const [photos, setPhotos] = useState([]), [status, setStatus] = useState('loading'), [error, setError] = useState(null), [page, setPage] = useState(0), [more, setMore] = useState(true);
-  const [camera, setCamera] = useState('ALL'), [includeNavcam, setIncludeNavcam] = useState(false), [index, setIndex] = useState(0), [imageLoading, setImageLoading] = useState(true), [modal, setModal] = useState(false);
+  const [camera, setCamera] = useState('ALL'), [includeNavcam, setIncludeNavcam] = useState(false), [index, setIndex] = useState(0), [resolvedImageId, setResolvedImageId] = useState(null), [modal, setModal] = useState(false);
   const requestRef = useRef(null);
 
   const loadPage = useCallback(async (targetPage, replace = false) => {
@@ -191,17 +191,17 @@ function PhotoGallery() {
   const cameras = useMemo(() => [...new Set(visiblePhotos.map(photo => photo.instrument))], [visiblePhotos]);
   const filtered = useMemo(() => camera === 'ALL' ? visiblePhotos : visiblePhotos.filter(photo => photo.instrument === camera), [visiblePhotos, camera]);
   const current = filtered[index] || filtered[0];
-  useEffect(() => { setIndex(0); setImageLoading(true); }, [camera, includeNavcam]);
-  useEffect(() => { setImageLoading(true); }, [current?.id]);
+  const imageLoading = Boolean(current && resolvedImageId !== current.id);
+  useEffect(() => { setIndex(0); }, [camera, includeNavcam]);
   const move = direction => setIndex(value => (value + direction + filtered.length) % filtered.length);
-  const select = value => { setIndex(value); setImageLoading(true); };
+  const select = value => setIndex(value);
   const minSol = photos.length ? Math.min(...photos.map(photo => photo.sol)) : null, maxSol = photos.length ? Math.max(...photos.map(photo => photo.sol)) : null;
 
   return <section className="data-panel image-panel">
     <div className="panel-header"><h2>SURFACE IMAGERY</h2><div className="search-range-display"><span className="range-label">SEARCH RANGE:</span><span className="range-value">{minSol ? `SOL ${minSol} TO ${maxSol}` : 'ACQUIRING...'}</span></div><div className="image-controls"><span className="rover-info">CURIOSITY ROVER</span><div className="image-counter"><span className="counter-text">IMAGE {filtered.length ? index + 1 : '--'} OF {filtered.length || '--'}</span></div></div></div>
     <div className="sol-search-indicator"><div className="search-info"><span className="search-label">PHOTO LINK</span><span className="search-value">{status === 'loading' ? 'CONNECTING TO NASA...' : status === 'loading-more' ? 'RECEIVING NEXT IMAGE PACKET...' : status === 'error' ? 'LINK INTERRUPTED' : `${photos.length} CURRENT RAW IMAGES RECEIVED`}</span></div>{status === 'error' && <button className="continue-search-btn" onClick={() => loadPage(page, page === 0)}>RETRY LINK</button>}{status === 'success' && more && <button className="continue-search-btn" onClick={() => loadPage(page + 1)}>LOAD {PHOTO_PAGE_SIZE} MORE</button>}</div>
     <div className="image-viewer"><div className="image-content"><div className="main-image-container">
-      {current && <><div className="image-navigation"><button className="nav-btn prev-btn" onClick={() => move(-1)} aria-label="Previous photo">‹</button><button className="nav-btn next-btn" onClick={() => move(1)} aria-label="Next photo">›</button></div><div className="photo-display"><img src={current.https_url || current.url} alt={current.description || current.title} className="rover-photo" onLoad={() => setImageLoading(false)} onError={() => setImageLoading(false)} onClick={() => setModal(true)}/></div><div className="image-camera-info"><span className="camera-label">{CAMERA_NAMES[current.instrument] || current.instrument} | Sol {current.sol}</span></div></>}
+      {current && <><div className="image-navigation"><button className="nav-btn prev-btn" onClick={() => move(-1)} aria-label="Previous photo">‹</button><button className="nav-btn next-btn" onClick={() => move(1)} aria-label="Next photo">›</button></div><div className="photo-display"><img key={current.id} src={current.https_url || current.url} alt={current.description || current.title} className="rover-photo" onLoad={() => setResolvedImageId(current.id)} onError={() => setResolvedImageId(current.id)} onClick={() => setModal(true)}/></div><div className="image-camera-info"><span className="camera-label">{CAMERA_NAMES[current.instrument] || current.instrument} | Sol {current.sol}</span></div></>}
       {(status === 'loading' || imageLoading) && <div className="image-loading"><div className="loading-spinner"/><span className="loading-text">{status === 'loading' ? 'ACQUIRING LATEST IMAGE PACKET' : 'DECODING IMAGE'}</span></div>}
       {status === 'error' && !current && <div className="image-error"><strong>PHOTO LINK UNAVAILABLE</strong><span>{error?.message}</span><button className="continue-search-btn" onClick={() => loadPage(0, true)}>RETRY</button></div>}
     </div><div className="camera-filter-panel"><div className="filter-header"><span className="filter-label">CAMERA FILTER</span><span className="active-filter">{camera === 'ALL' ? 'ALL CAMERAS' : CAMERA_NAMES[camera] || camera}</span></div><button className={`navcam-toggle ${includeNavcam ? 'active' : ''}`} type="button" aria-pressed={includeNavcam} onClick={() => { setIncludeNavcam(value => !value); setCamera('ALL'); }}><span className="navcam-toggle-copy"><strong>INCLUDE NAVCAM</strong><small>{navcamCount} lower-resolution images</small></span><span className="navcam-switch" aria-hidden="true"><span/></span></button><div className="camera-buttons"><CameraButton active={camera === 'ALL'} onClick={() => setCamera('ALL')}>ALL ({visiblePhotos.length})</CameraButton>{cameras.map(value => <CameraButton key={value} active={camera === value} onClick={() => setCamera(value)}>{CAMERA_NAMES[value] || value} ({visiblePhotos.filter(photo => photo.instrument === value).length})</CameraButton>)}</div></div></div></div>
