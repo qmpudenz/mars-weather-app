@@ -2005,6 +2005,83 @@ body::before {
   padding-right: 10px;
 }
 
+.navcam-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border-primary);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.22);
+  color: var(--text-secondary);
+  font-family: 'Share Tech Mono', monospace;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.navcam-toggle:hover {
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+}
+
+.navcam-toggle-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.navcam-toggle-copy strong {
+  font-size: 0.78rem;
+  letter-spacing: 1px;
+}
+
+.navcam-toggle-copy small {
+  color: var(--text-muted);
+  font-size: 0.68rem;
+}
+
+.navcam-switch {
+  position: relative;
+  flex: 0 0 34px;
+  width: 34px;
+  height: 18px;
+  border: 1px solid var(--border-primary);
+  border-radius: 999px;
+  background: var(--bg-secondary);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.navcam-switch span {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.navcam-toggle.active {
+  border-color: var(--accent-orange);
+  color: var(--accent-orange);
+  background: rgba(255, 165, 0, 0.08);
+}
+
+.navcam-toggle.active .navcam-switch {
+  border-color: var(--accent-orange);
+  background: rgba(255, 165, 0, 0.14);
+}
+
+.navcam-toggle.active .navcam-switch span {
+  transform: translateX(16px);
+  background: var(--accent-orange);
+  box-shadow: 0 0 7px rgba(255, 165, 0, 0.65);
+}
+
 .camera-buttons::-webkit-scrollbar {
   width: 6px;
 }
