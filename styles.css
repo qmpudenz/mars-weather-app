@@ -341,6 +341,16 @@ body::before {
   color: var(--text-primary);
 }
 
+.temp-reading-display.high-temp .temp-value-display {
+  color: var(--nasa-red);
+  text-shadow: 0 0 14px rgba(252, 61, 33, 0.32);
+}
+
+.temp-reading-display.low-temp .temp-value-display {
+  color: var(--accent-cyan);
+  text-shadow: 0 0 14px rgba(0, 212, 255, 0.28);
+}
+
 .temp-value {
   font-family: 'Orbitron', monospace;
   font-size: 1.3rem;
