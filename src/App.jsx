@@ -110,6 +110,13 @@ function ModeSelector({ mode, setMode }) {
 
 function Summary({ label, value }) { return <div className="summary-item"><span className="summary-label">{label}</span><span className="summary-value">{value}</span></div>; }
 
+function chartBenchmarkLabel(day, index, total) {
+  if (index === total - 1) return 'TODAY';
+  if (total <= 7) return `Sol ${day.sol}`;
+  const interval = Math.ceil((total - 1) / 5);
+  return index % interval === 0 ? `Sol ${day.sol}` : null;
+}
+
 function HistoryChart({ data }) {
   const ordered = [...data].reverse();
   const periodLow = Math.min(...data.map(item => item.low));
@@ -144,7 +151,7 @@ function SvgChart({ data, mode }) {
       <linearGradient id="high-bar-gradient" x1="0" y1="1" x2="0" y2="0"><stop offset="0%" stopColor="#661c19"/><stop offset="55%" stopColor="var(--nasa-red)"/><stop offset="100%" stopColor="var(--accent-orange)"/></linearGradient>
     </defs>
     {[0, 1, 2, 3, 4].map(index => { const lineY = top + index * plotHeight / 4; return <g key={index}><line className="chart-grid" x1={left} y1={lineY} x2={width - right} y2={lineY}/><text className="chart-axis-label" x={left - 12} y={lineY + 4} textAnchor="end">{Math.round(max - index * range / 4)}°</text></g>; })}
-    {ordered.map((day, index) => <text key={day.sol} className="chart-axis-label" x={x(index)} y={height - 20} textAnchor="middle">Sol {day.sol}</text>)}
+    {ordered.map((day, index) => { const label = chartBenchmarkLabel(day, index, ordered.length); return label && <text key={day.sol} className={`chart-axis-label ${label === 'TODAY' ? 'today' : ''}`} x={x(index)} y={height - 20} textAnchor="middle">{label}</text>; })}
     {mode === 'combined' && <polygon className="chart-range-area" points={`${linePoints('high')} ${[...ordered].reverse().map((day, reverseIndex) => `${x(ordered.length - reverseIndex - 1)},${y(day.low)}`).join(' ')}`}/>} 
     {(mode === 'bar' || mode === 'combined') && ordered.map((day, index) => <g key={day.sol} className="chart-bar-group"><rect className="chart-bar low" x={x(index) - barWidth - 2} y={y(day.low)} width={barWidth} height={top + plotHeight - y(day.low)} {...pointEvents(day, 'low')}/><rect className="chart-bar high" x={x(index) + 2} y={y(day.high)} width={barWidth} height={top + plotHeight - y(day.high)} {...pointEvents(day, 'high')}/></g>)}
     {mode === 'combined' && <polyline className="chart-line average" points={ordered.map((day, index) => `${x(index)},${y((day.high + day.low) / 2)}`).join(' ')}/>} 
@@ -160,7 +167,7 @@ function RadialChart({ data, tooltip, setTooltip }) {
   const events = (day, series) => ({ tabIndex: 0, onMouseEnter: event => setTooltip({ text: `Sol ${day.sol} · ${series.toUpperCase()} ${day[series]}°F`, series, x: event.clientX, y: event.clientY }), onMouseLeave: () => setTooltip(null), onFocus: event => setTooltip({ text: `Sol ${day.sol} · ${series.toUpperCase()} ${day[series]}°F`, series, x: event.clientX, y: event.clientY }), onBlur: () => setTooltip(null) });
   return <div className="react-chart-wrap"><svg className="temperature-chart chart-radial" viewBox={`0 0 ${width} ${height}`} role="img" aria-label="Radial temperature chart">
     {[.25, .5, .75, 1].map(scale => <polygon key={scale} className="radar-grid" points={data.map((_, index) => position(index, radius * scale).join(',')).join(' ')}/>)}
-    {data.map((day, index) => { const [ax, ay] = position(index, radius), [lx, ly] = position(index, radius + 20); return <g key={day.sol}><line className="chart-grid" x1={cx} y1={cy} x2={ax} y2={ay}/><text className="chart-axis-label" x={lx} y={ly + 4} textAnchor="middle">{day.sol}</text></g>; })}
+    {data.map((day, index) => { const [ax, ay] = position(index, radius), [lx, ly] = position(index, radius + 20), label = chartBenchmarkLabel(day, index, data.length); return <g key={day.sol}><line className="chart-grid" x1={cx} y1={cy} x2={ax} y2={ay}/>{label && <text className={`chart-axis-label ${label === 'TODAY' ? 'today' : ''}`} x={lx} y={ly + 4} textAnchor="middle">{label}</text>}</g>; })}
     <polygon className="radar-shape high" points={polygon('high')}/><polygon className="radar-shape low" points={polygon('low')}/>
     {['high', 'low'].flatMap(series => data.map((day, index) => { const [px, py] = coords(day, index, series); return <circle key={`${series}-${day.sol}`} className={`radar-point ${series}`} cx={px} cy={py} r="5" {...events(day, series)}/>; }))}
   </svg>{tooltip && <ChartTooltip {...tooltip}/>}</div>;

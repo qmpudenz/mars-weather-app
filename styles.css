@@ -1386,6 +1386,12 @@ body::before {
   font-size: 12px;
 }
 
+.chart-axis-label.today {
+  fill: var(--accent-orange);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
 .chart-line {
   fill: none;
   stroke-width: 3;
